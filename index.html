@@ -7,11 +7,13 @@
         <style>
             body {
                 margin: 0;
-                padding: 20px;
+                padding: 10px;
                 background: #0a0a2e;
                 color: white;
                 font-family: Arial, sans-serif;
                 min-height: 100vh;
+                /* Prevent zoom on input focus on iOS */
+                -webkit-text-size-adjust: 100%;
             }
 
             .game-layout {
@@ -27,6 +29,7 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                min-width: 0; /* Prevent flex overflow */
             }
 
             .sidebar {
@@ -81,12 +84,15 @@
                     #1a1a4e 0%,
                     #0a0a2e 70%
                 );
+                max-width: 100%;
+                height: auto;
             }
 
             .controls {
                 margin: 20px 0;
                 text-align: center;
                 max-width: 500px;
+                width: 100%;
             }
 
             .instructions {
@@ -95,6 +101,8 @@
                 background: #1a1a3e;
                 border-radius: 8px;
                 max-width: 500px;
+                width: 100%;
+                box-sizing: border-box;
                 font-size: 14px;
                 text-align: center;
             }
@@ -108,25 +116,34 @@
             }
 
             button {
-                margin: 0 5px;
-                padding: 8px 16px;
+                margin: 5px;
+                padding: 12px 16px;
                 background: #444;
                 color: white;
                 border: none;
-                border-radius: 4px;
+                border-radius: 6px;
                 cursor: pointer;
-                font-size: 12px;
+                font-size: 14px;
+                /* Better touch targets */
+                min-height: 44px;
+                min-width: 44px;
             }
 
             button:hover {
                 background: #666;
             }
 
+            button:active {
+                background: #555;
+                transform: scale(0.95);
+            }
+
             .check-button {
                 background: #28a745 !important;
                 font-size: 14px;
-                padding: 10px 20px;
-                margin: 0 10px;
+                padding: 12px 20px;
+                margin: 5px;
+                font-weight: bold;
             }
 
             .found-words {
@@ -138,9 +155,13 @@
 
             .word-item {
                 background: #2a2a5e;
-                padding: 6px 12px;
+                padding: 8px 12px;
                 border-radius: 4px;
                 font-size: 14px;
+                /* Better touch interaction */
+                min-height: 32px;
+                display: flex;
+                align-items: center;
             }
 
             .results {
@@ -149,13 +170,31 @@
                 background: #2a2a5e;
                 border-radius: 8px;
                 max-width: 500px;
+                width: 100%;
+                box-sizing: border-box;
                 font-size: 14px;
                 line-height: 1.5;
+                /* Better text readability on mobile */
+                word-wrap: break-word;
+                overflow-wrap: break-word;
             }
 
+            h1 {
+                text-align: center;
+                margin-bottom: 20px;
+                font-size: clamp(24px, 5vw, 32px);
+                padding: 0 10px;
+            }
+
+            /* Mobile-specific optimizations */
             @media (max-width: 768px) {
+                body {
+                    padding: 5px;
+                }
+
                 .game-layout {
                     flex-direction: column;
+                    gap: 15px;
                 }
 
                 .sidebar {
@@ -168,6 +207,142 @@
                     justify-content: space-around;
                     align-items: center;
                     text-align: left;
+                    padding: 15px;
+                }
+
+                .score-panel h2 {
+                    font-size: 24px;
+                    margin: 0;
+                }
+
+                .rank,
+                .score {
+                    font-size: 14px;
+                }
+
+                #gameCanvas {
+                    width: 100%;
+                    max-width: 500px;
+                    height: auto;
+                }
+
+                .instructions {
+                    font-size: 13px;
+                    padding: 12px;
+                    margin: 10px 0;
+                }
+
+                .keyboard-hint {
+                    font-size: 11px;
+                    padding: 8px;
+                }
+
+                .controls {
+                    margin: 15px 0;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 10px;
+                }
+
+                button {
+                    flex: 1;
+                    min-width: 120px;
+                    max-width: 200px;
+                    margin: 2px;
+                }
+
+                .word-bank {
+                    padding: 15px;
+                }
+
+                .word-bank h3 {
+                    font-size: 18px;
+                    margin-bottom: 10px;
+                }
+
+                .found-words {
+                    gap: 6px;
+                }
+
+                .word-item {
+                    font-size: 13px;
+                    padding: 6px 10px;
+                }
+
+                .results {
+                    font-size: 13px;
+                    padding: 12px;
+                    margin: 15px 0;
+                }
+            }
+
+            /* Very small screens (phones in portrait) */
+            @media (max-width: 480px) {
+                h1 {
+                    font-size: 24px;
+                    margin-bottom: 15px;
+                }
+
+                .score-panel {
+                    flex-direction: column;
+                    gap: 8px;
+                    text-align: center;
+                }
+
+                .score-panel > div {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                }
+
+                .instructions {
+                    font-size: 12px;
+                }
+
+                .keyboard-hint {
+                    display: none; /* Hide on very small screens */
+                }
+
+                #gameCanvas {
+                    max-width: 400px;
+                }
+
+                .controls {
+                    flex-direction: column;
+                }
+
+                button {
+                    width: 100%;
+                    max-width: none;
+                    margin: 3px 0;
+                }
+            }
+
+            /* Landscape orientation on mobile */
+            @media (max-height: 500px) and (orientation: landscape) {
+                .game-layout {
+                    flex-direction: row;
+                }
+
+                .sidebar {
+                    width: 250px;
+                    order: 0;
+                }
+
+                h1 {
+                    margin-bottom: 10px;
+                    font-size: 20px;
+                }
+
+                .instructions {
+                    margin: 10px 0;
+                    padding: 10px;
+                }
+
+                .keyboard-hint {
+                    display: none;
                 }
             }
         </style>
@@ -199,10 +374,9 @@
                     <!-- <button onclick="toggleAutoCheck()">
                         Auto-Check: <span id="autoCheckStatus">OFF</span>
                     </button> -->
-                    <button onclick="runFindAllPossibleWords()">
-                        Get All Words
-                    </button>
                 </div>
+
+                <div id="results" class="results" style="display: none"></div>
             </div>
 
             <div class="sidebar">
@@ -762,15 +936,19 @@
 
             function handleMouseDown(e) {
                 const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const x = (e.clientX - rect.left) * scaleX;
+                const y = (e.clientY - rect.top) * scaleY;
                 startDrag(x, y);
             }
 
             function handleMouseMove(e) {
                 const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const x = (e.clientX - rect.left) * scaleX;
+                const y = (e.clientY - rect.top) * scaleY;
                 updateDrag(x, y);
             }
 
@@ -782,8 +960,10 @@
                 e.preventDefault();
                 const rect = canvas.getBoundingClientRect();
                 const touch = e.touches[0];
-                const x = touch.clientX - rect.left;
-                const y = touch.clientY - rect.top;
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const x = (touch.clientX - rect.left) * scaleX;
+                const y = (touch.clientY - rect.top) * scaleY;
                 startDrag(x, y);
             }
 
@@ -791,8 +971,10 @@
                 e.preventDefault();
                 const rect = canvas.getBoundingClientRect();
                 const touch = e.touches[0];
-                const x = touch.clientX - rect.left;
-                const y = touch.clientY - rect.top;
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const x = (touch.clientX - rect.left) * scaleX;
+                const y = (touch.clientY - rect.top) * scaleY;
                 updateDrag(x, y);
             }
 

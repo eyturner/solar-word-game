@@ -1,26 +1,50 @@
+function runFindAllPossibleWords() {
+  let allPossibleWords = findAllPossibleWords(
+    gameState.letters,
+    gameState.rings,
+    gameState.sun.letter,
+    dictionary,
+  );
+
+  console.log(allPossibleWords);
+  let maxScore = 0;
+  for (const word of allPossibleWords.words) {
+    if (word.length == 3) maxScore += 1;
+    else maxScore += word.length;
+  }
+  console.log("MAX:", maxScore);
+}
+
 function findAllPossibleWords(initialLetters, rings, sunLetter, validWords) {
   const allFoundWords = new Set();
   const wordDetails = [];
-
-  // Only check these specific positions
   const positionsToCheck = [0, 1, 8, 9, 10, 11];
 
-  // Get all possible ring positions (each ring can be in 12 positions: 0°, 30°, 60°, ..., 330°)
-  const ringNames = Object.keys(rings);
+  // Explicitly define ring order to ensure consistent cycling
+  const ringNames = ["inner", "middle", "outer", "fourth", "fifth"];
   const totalCombinations = Math.pow(12, ringNames.length);
 
-  // Iterate through all possible combinations of ring positions
+  console.log(
+    `Checking ${totalCombinations} combinations (${ringNames.length} rings)`,
+  );
+
   for (let combination = 0; combination < totalCombinations; combination++) {
-    // Convert combination number to ring positions
     const ringPositions = {};
     let temp = combination;
 
-    ringNames.forEach((ringName) => {
-      ringPositions[ringName] = (temp % 12) * 30; // Convert to degrees
+    // Build positions explicitly in the right order
+    for (let i = 0; i < ringNames.length; i++) {
+      const ringName = ringNames[i];
+      ringPositions[ringName] = (temp % 12) * 30;
       temp = Math.floor(temp / 12);
-    });
+    }
 
-    // Check only the specific positions for this ring configuration
+    // Debug: log every 1000th combination to see the pattern
+    // if (combination % 1000 === 0) {
+    //   console.log(`Combination ${combination}:`, ringPositions);
+    // }
+
+    // Check positions for this ring configuration
     for (let position of positionsToCheck) {
       const letters = getLettersAtPositionForState(
         position,
@@ -42,7 +66,7 @@ function findAllPossibleWords(initialLetters, rings, sunLetter, validWords) {
           wordDetails.push({
             word: wordObj.word,
             position: position,
-            ringPositions: { ...ringPositions }, // Copy the positions
+            ringPositions: { ...ringPositions },
             letters: wordObj.letters,
             includesSun: wordObj.includesSun,
           });
@@ -56,10 +80,10 @@ function findAllPossibleWords(initialLetters, rings, sunLetter, validWords) {
     totalWords: allFoundWords.size,
     details: wordDetails,
     positionsChecked: positionsToCheck,
+    combinationsChecked: totalCombinations,
   };
 }
 
-// Helper function - modified version of your getLettersAtPosition
 function getLettersAtPositionForState(
   position,
   letters,
@@ -102,7 +126,13 @@ function getLettersAtPositionForState(
   });
 
   // Add blanks for missing rings
-  const RING_RADII = [80, 130, 180, 230, 280]; // Your ring radii
+  const RING_RADII = [
+    FIRST_RING_RADIUS,
+    SECOND_RING_RADIUS,
+    THIRD_RING_RADIUS,
+    FOURTH_RING_RADIUS,
+    FIFTH_RING_RADIUS,
+  ];
   for (let radius of RING_RADII) {
     if (!positionLetters.some((letterObj) => letterObj.radius == radius)) {
       positionLetters.push({ letter: " ", radius });
@@ -124,7 +154,6 @@ function getLettersAtPositionForState(
   return fullSequence;
 }
 
-// Helper function - modified version of your findWordsInAlignment
 function findWordsInAlignmentForState(
   letters,
   position,

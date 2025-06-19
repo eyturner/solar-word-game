@@ -190,7 +190,7 @@
                     </div>
                 </div>
 
-                <canvas id="gameCanvas" width="550" height="600"></canvas>
+                <canvas id="gameCanvas" width="600" height="600"></canvas>
 
                 <div class="controls">
                     <button class="check-button" onclick="checkAllPositions()">
@@ -199,9 +199,10 @@
                     <!-- <button onclick="toggleAutoCheck()">
                         Auto-Check: <span id="autoCheckStatus">OFF</span>
                     </button> -->
+                    <button onclick="runFindAllPossibleWords()">
+                        Get All Words
+                    </button>
                 </div>
-
-                <div id="results" class="results" style="display: none"></div>
             </div>
 
             <div class="sidebar">
@@ -249,150 +250,185 @@
                 letters: [
                     // First ring
                     {
-                        letter: "C",
+                        letter: "F",
                         radius: FIRST_RING_RADIUS,
                         angle: 0,
                         color: FIRST_RING_COLOR,
                         ring: "inner",
                     },
+                    // {
+                    //     letter: "A",
+                    //     radius: FIRST_RING_RADIUS,
+                    //     angle: 60,
+                    //     color: FIRST_RING_COLOR,
+                    //     ring: "inner",
+                    // },
                     {
-                        letter: "T",
+                        letter: "I",
                         radius: FIRST_RING_RADIUS,
-                        angle: 90,
+                        angle: 120,
                         color: FIRST_RING_COLOR,
                         ring: "inner",
                     },
                     {
-                        letter: "S",
+                        letter: "O",
                         radius: FIRST_RING_RADIUS,
                         angle: 180,
                         color: FIRST_RING_COLOR,
                         ring: "inner",
                     },
+                    // {
+                    //     letter: "I",
+                    //     radius: FIRST_RING_RADIUS,
+                    //     angle: 240,
+                    //     color: FIRST_RING_COLOR,
+                    //     ring: "inner",
+                    // },
                     {
-                        letter: "N",
+                        letter: "U",
                         radius: FIRST_RING_RADIUS,
-                        angle: 270,
+                        angle: 300,
                         color: FIRST_RING_COLOR,
                         ring: "inner",
                     },
 
                     // Second ring
                     {
-                        letter: "A",
-                        radius: SECOND_RING_RADIUS,
-                        angle: 0,
-                        color: SECOND_RING_COLOR,
-                        ring: "middle",
-                    },
-                    {
                         letter: "S",
                         radius: SECOND_RING_RADIUS,
-                        angle: 150,
+                        angle: 30,
+                        color: SECOND_RING_COLOR,
+                        ring: "middle",
+                    },
+                    // {
+                    //     letter: "C",
+                    //     radius: SECOND_RING_RADIUS,
+                    //     angle: 60,
+                    //     color: SECOND_RING_COLOR,
+                    //     ring: "middle",
+                    // },
+                    {
+                        letter: "R",
+                        radius: SECOND_RING_RADIUS,
+                        angle: 90,
                         color: SECOND_RING_COLOR,
                         ring: "middle",
                     },
                     {
-                        letter: "H",
+                        letter: "P",
+                        radius: SECOND_RING_RADIUS,
+                        angle: 120,
+                        color: SECOND_RING_COLOR,
+                        ring: "middle",
+                    },
+                    {
+                        letter: "W",
                         radius: SECOND_RING_RADIUS,
                         angle: 180,
                         color: SECOND_RING_COLOR,
                         ring: "middle",
                     },
                     {
-                        letter: "A",
+                        letter: "L",
                         radius: SECOND_RING_RADIUS,
-                        angle: 270,
+                        angle: 210,
+                        color: SECOND_RING_COLOR,
+                        ring: "middle",
+                    },
+                    // {
+                    //     letter: "L",
+                    //     radius: SECOND_RING_RADIUS,
+                    //     angle: 240,
+                    //     color: SECOND_RING_COLOR,
+                    //     ring: "middle",
+                    // },
+                    {
+                        letter: "T",
+                        radius: SECOND_RING_RADIUS,
+                        angle: 300,
                         color: SECOND_RING_COLOR,
                         ring: "middle",
                     },
 
                     // Third ring
                     {
-                        letter: "P",
+                        letter: "I",
                         radius: THIRD_RING_RADIUS,
-                        angle: 0,
+                        angle: 30,
                         color: THIRD_RING_COLOR,
                         ring: "outer",
                     },
                     {
-                        letter: "T",
+                        letter: "O",
                         radius: THIRD_RING_RADIUS,
-                        angle: 150,
+                        angle: 90,
+                        color: THIRD_RING_COLOR,
+                        ring: "outer",
+                    },
+                    {
+                        letter: "E",
+                        radius: THIRD_RING_RADIUS,
+                        angle: 180,
                         color: THIRD_RING_COLOR,
                         ring: "outer",
                     },
                     {
                         letter: "I",
                         radius: THIRD_RING_RADIUS,
-                        angle: 180,
-                        color: THIRD_RING_COLOR,
-                        ring: "outer",
-                    },
-                    {
-                        letter: "L",
-                        radius: THIRD_RING_RADIUS,
-                        angle: 270,
-                        color: THIRD_RING_COLOR,
-                        ring: "outer",
-                    },
-                    {
-                        letter: "S",
-                        radius: THIRD_RING_RADIUS,
-                        angle: 300,
+                        angle: 210,
                         color: THIRD_RING_COLOR,
                         ring: "outer",
                     },
 
                     // Fourth ring
                     {
+                        letter: "R",
+                        radius: FOURTH_RING_RADIUS,
+                        angle: 30,
+                        color: FOURTH_RING_COLOR,
+                        ring: "fourth",
+                    },
+                    {
                         letter: "S",
                         radius: FOURTH_RING_RADIUS,
-                        angle: 0,
+                        angle: 90,
                         color: FOURTH_RING_COLOR,
                         ring: "fourth",
                     },
                     {
-                        letter: "A",
-                        radius: FOURTH_RING_RADIUS,
-                        angle: 150,
-                        color: FOURTH_RING_COLOR,
-                        ring: "fourth",
-                    },
-                    {
-                        letter: "P",
+                        letter: "R",
                         radius: FOURTH_RING_RADIUS,
                         angle: 180,
                         color: FOURTH_RING_COLOR,
                         ring: "fourth",
                     },
                     {
-                        letter: "P",
+                        letter: "L",
                         radius: FOURTH_RING_RADIUS,
-                        angle: 270,
-                        color: FOURTH_RING_COLOR,
-                        ring: "fourth",
-                    },
-                    {
-                        letter: "A",
-                        radius: FOURTH_RING_RADIUS,
-                        angle: 300,
+                        angle: 210,
                         color: FOURTH_RING_COLOR,
                         ring: "fourth",
                     },
 
                     // Fifth ring
                     {
-                        letter: "R",
+                        letter: "I",
                         radius: FIFTH_RING_RADIUS,
-                        angle: 150,
+                        angle: 30,
                         color: FIFTH_RING_COLOR,
                         ring: "fifth",
                     },
                     {
-                        letter: "G",
+                        letter: "E",
                         radius: FIFTH_RING_RADIUS,
-                        angle: 300,
+                        angle: 90,
+                        color: FIFTH_RING_COLOR,
+                        ring: "fifth",
+                    },
+                    {
+                        letter: "Y",
+                        radius: FIFTH_RING_RADIUS,
+                        angle: 210,
                         color: FIFTH_RING_COLOR,
                         ring: "fifth",
                     },
@@ -429,13 +465,16 @@
                         color: FIFTH_RING_COLOR,
                     },
                 },
+                shuffled: false,
                 foundWords: new Set(),
+                numWordsInGrandAlignment: 5,
                 score: 0,
+                maxScore: 142,
                 autoCheck: false,
                 dragState: null,
                 selectedRing: null,
-                center: { x: 275, y: 300 },
-                sun: { letter: "E", radius: 30, color: "#ffdd44" },
+                center: { x: 300, y: 300 },
+                sun: { letter: "L", radius: 20, color: "#ffdd44" },
             };
 
             // Word list
@@ -458,9 +497,9 @@
                     return new Set(["SPACE", "STAR", "PLANET"]); // Fallback
                 }
             }
-            let validWords;
-            loadDictionary().then((dictionary) => {
-                validWords = dictionary;
+            let dictionary;
+            loadDictionary().then((raw_dictionary) => {
+                dictionary = raw_dictionary;
             });
 
             // Canvas setup
@@ -504,6 +543,9 @@
 
                 // Draw reading direction indicators
                 drawReadingIndicators();
+
+                // Shuffle planets
+                shufflePlanets();
 
                 // Draw planets
                 drawPlanets();
@@ -834,38 +876,44 @@
             // Scoring system
             const RANKS = [
                 { name: "Beginner", min: 0 },
-                { name: "Good", min: 1 },
-                { name: "Great", min: 10 },
-                { name: "Voyager", min: 20 },
-                { name: "Stellar", min: 30 },
-                { name: "Red Giant", min: 40 },
-                { name: "White Dwarf", min: 50 },
-                { name: "Neutron Star", min: 60 },
-                { name: "Supernova", min: 70 },
-                { name: "Black Hole", min: 80 },
+                { name: "Good", min: Math.floor(gameState.maxScore * 0.1) },
+                { name: "Great", min: Math.floor(gameState.maxScore * 0.2) },
+                { name: "Voyager", min: Math.floor(gameState.maxScore * 0.3) },
+                { name: "Stellar", min: Math.floor(gameState.maxScore * 0.4) },
+                {
+                    name: "Red Giant",
+                    min: Math.floor(gameState.maxScore * 0.5),
+                },
+                {
+                    name: "White Dwarf",
+                    min: Math.floor(gameState.maxScore * 0.6),
+                },
+                {
+                    name: "Supernova",
+                    min: Math.floor(gameState.maxScore * 0.7),
+                },
+                {
+                    name: "Neutron Star",
+                    min: Math.floor(gameState.maxScore * 0.8),
+                },
+                { name: "Black Hole", min: gameState.maxScore },
             ];
 
-            function calculateWordScore(
-                word,
-                isMultiWord = false,
-                hasSun = false,
-                allRings = false,
-            ) {
+            function calculateWordScore(word, hasSun = false) {
                 let baseScore;
                 const length = word.length;
 
                 // Base scoring (Spelling Bee style)
-                if (length === 3 || length === 4) {
+                if (length === 3) {
                     baseScore = 1;
-                } else if (length === 5) {
-                    baseScore = 5;
+                } else if (length === 4) {
+                    baseScore = 2;
                 } else {
-                    baseScore = length; // 6+ letters get 1 point per letter
+                    baseScore = length; // 5+ letters get 1 point per letter
                 }
 
                 // Bonuses
-                if (hasSun) baseScore += 2; // Sun letter bonus
-                if (allRings) baseScore += 5; // Uses all rings bonus
+                if (hasSun) baseScore += 1; // Sun letter bonus
 
                 return baseScore;
             }
@@ -1016,7 +1064,7 @@
                 // Check if this forms a valid word
                 const potentialWords = letters.join("").trim().split(" ");
                 for (const word of potentialWords) {
-                    if (validWords.has(word)) {
+                    if (dictionary.has(word)) {
                         words.push({
                             word: word,
                             direction: isVerticalSector
@@ -1054,12 +1102,18 @@
                     if (wordObjects.length > 0) {
                         // Check for multi-word bonus at this position
                         const isMultiWord = wordObjects.length > 1;
-                        let positionMultiplier = 1;
-                        if (wordObjects.length === 2) positionMultiplier = 1.5;
-                        else if (wordObjects.length === 3)
-                            positionMultiplier = 2;
-                        else if (wordObjects.length >= 4)
-                            positionMultiplier = 3;
+                        const isGrandAlignment =
+                            wordObjects.length ==
+                            gameState.numWordsInGrandAlignment;
+
+                        // 2 bonus points for each additional word found!
+                        let bonusScore = 0;
+                        if (wordObjects.length > 1 && !isGrandAlignment) {
+                            bonusScore +=
+                                2 *
+                                (gameState.numWordsInGrandAlignment -
+                                    wordObjects.length);
+                        } else if (isGrandAlignment) bonusScore += 15;
 
                         wordObjects.forEach((wordObj) => {
                             allWords.push(wordObj.word);
@@ -1070,16 +1124,11 @@
                                 const hasSun = wordObj.word.includes(
                                     gameState.sun.letter,
                                 );
-                                const allRings = letters.length >= 4; // Sun + 3 rings
                                 let wordScore = calculateWordScore(
                                     wordObj.word,
-                                    isMultiWord,
                                     hasSun,
-                                    allRings,
                                 );
-                                wordScore = Math.round(
-                                    wordScore * positionMultiplier,
-                                );
+                                wordScore += bonusScore;
                                 gameState.score += wordScore;
                             }
                         });
@@ -1088,40 +1137,8 @@
                             position: position,
                             letters: letters,
                             words: wordObjects,
-                            multiplier: positionMultiplier,
                         });
                     }
-                }
-
-                // Display results
-                const resultsDiv = document.getElementById("results");
-                if (wordDetails.length > 0) {
-                    let html = `<strong>Found ${allWords.length} word(s) at ${wordDetails.length} position(s):</strong><br>`;
-                    wordDetails.forEach((detail) => {
-                        const clockPos =
-                            detail.position === 0 ? 12 : detail.position;
-                        html += `<strong>${clockPos} o'clock:</strong> ${detail.letters.join("")}`;
-                        if (detail.multiplier > 1) {
-                            html += ` <span style="color: #ffdd44">(${detail.multiplier}x bonus!)</span>`;
-                        }
-                        html += `<br>`;
-                        detail.words.forEach((wordObj) => {
-                            const directionSymbol =
-                                wordObj.direction === "outward" ? "→" : "←";
-                            const isNew = !gameState.foundWords.has(
-                                wordObj.word,
-                            )
-                                ? ' <span style="color: #4ecdc4">NEW!</span>'
-                                : "";
-                            html += `&nbsp;&nbsp;${directionSymbol} ${wordObj.word}${isNew}<br>`;
-                        });
-                    });
-                    resultsDiv.innerHTML = html;
-                    resultsDiv.style.display = "block";
-                } else {
-                    resultsDiv.innerHTML =
-                        "<strong>No words found at any position.</strong> Try rotating the rings!";
-                    resultsDiv.style.display = "block";
                 }
 
                 // Add to word bank
@@ -1202,6 +1219,18 @@
                         return "fourth";
                     default:
                         return null;
+                }
+            }
+
+            function shufflePlanets() {
+                if (!gameState.shuffled) {
+                    const rings = gameState.rings;
+                    for (let ring of Object.keys(rings)) {
+                        let randomRotation =
+                            30 * Math.floor(12 * Math.random());
+                        rings[ring].targetPosition += randomRotation;
+                    }
+                    gameState.shuffled = true;
                 }
             }
 

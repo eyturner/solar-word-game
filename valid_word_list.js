@@ -60,12 +60,6 @@ async function createCommonWordList() {
 }
 // Filter functions
 function removeInappropriateWords(word) {
-  // Basic inappropriate word filter - you'll want to expand this list
-  const inappropriateWords = new Set([
-    // Add your filter list here - I won't include examples
-    // You can find curated lists online for this purpose
-  ]);
-
   return !inappropriateWords.has(word);
 }
 
@@ -83,14 +77,9 @@ function removeObscureWords(word) {
 
 function removeProperNouns(word) {
   // Scrabble dictionary shouldn't have these, but just in case
-  const properNouns = new Set([
-    "MARS",
-    "VENUS",
-    "EARTH", // You might want to keep some space-related ones
-    // Add others as needed
-  ]);
+  const properNouns = new Set(["MARS", "VENUS", "EARTH"]);
 
-  // Keep space-related proper nouns for your theme
+  // Keep space-related proper nouns for space-theme
   const spaceTerms = new Set(["MARS", "VENUS", "EARTH", "PLUTO", "SATURN"]);
 
   return !properNouns.has(word) || spaceTerms.has(word);
@@ -185,13 +174,13 @@ async function setupGameDictionary() {
   // Export for backup/review
   exportWordList(cleanWords, "solar_word_game_dictionary.txt");
 
-  // Use in your game
+  // Use in game
   return cleanWords;
 }
 
-// Call this when setting up your game
+// Call this when setting up the game
 // setupGameDictionary().then((dictionary) => {
-//     // Now test your puzzle with the clean dictionary
+//     // Now test the puzzle with the clean dictionary
 //     const result = findAllPossibleWords(
 //         gameState.letters,
 //         gameState.rings,
@@ -200,7 +189,7 @@ async function setupGameDictionary() {
 //     );
 
 //     console.log(
-//         `Your puzzle can create ${result.totalWords} words:`,
+//         `This puzzle can create ${result.totalWords} words:`,
 //         result.words,
 //     );
 // });

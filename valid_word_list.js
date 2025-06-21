@@ -15,7 +15,6 @@ async function createCleanWordList() {
 
     // Apply filters
     const filteredWords = rawWords
-      .filter(removeInappropriateWords)
       .filter(removeObscureWords)
       .filter(removeProperNouns)
       .filter(onlyCommonLetters);
@@ -59,9 +58,6 @@ async function createCommonWordList() {
   }
 }
 // Filter functions
-function removeInappropriateWords(word) {
-  return !inappropriateWords.has(word);
-}
 
 function removeObscureWords(word) {
   // Remove very uncommon words, archaic terms, etc.
@@ -111,7 +107,6 @@ function onlyCommonLetters(word) {
     /ZZX/,
     /YYZ/,
     /YYX/,
-    /XXY/,
     /XXZ/,
   ];
 
@@ -119,7 +114,7 @@ function onlyCommonLetters(word) {
 }
 
 // Additional utility functions
-function exportWordList(wordSet, filename = "clean_words.txt") {
+export function exportWordList(wordSet, filename = "clean_words.txt") {
   // Convert to downloadable file
   const wordArray = Array.from(wordSet).sort();
   const content = wordArray.join("\n");
@@ -160,14 +155,14 @@ function analyzeWordList(wordSet) {
 }
 
 // Usage example:
-async function setupGameDictionary() {
+export async function setupGameDictionary() {
   console.log("Loading and filtering dictionary...");
 
   const cleanWords = await createCleanWordList();
-  const commonWords = await createCommonWordList();
-  const intersectionWords = commonWords.intersection(cleanWords);
+  // const commonWords = await createCommonWordList();
+  // const intersectionWords = commonWords.intersection(cleanWords);
 
-  const analysis = analyzeWordList(intersectionWords);
+  const analysis = analyzeWordList(cleanWords);
 
   console.log("Dictionary Analysis:", analysis);
 

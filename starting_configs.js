@@ -410,3 +410,213 @@ let flowers = {
   center: { x: 300, y: 300 },
   sun: { letter: "L", radius: 20, color: "#ffdd44" },
 };
+
+let gems = {
+  letters: [
+    // First ring
+    {
+      letter: "E",
+      radius: FIRST_RING_RADIUS,
+      angle: 0,
+      color: FIRST_RING_COLOR,
+      ring: "inner",
+    },
+    {
+      letter: "L",
+      radius: FIRST_RING_RADIUS,
+      angle: 90,
+      color: FIRST_RING_COLOR,
+      ring: "inner",
+    },
+    {
+      letter: "A",
+      radius: FIRST_RING_RADIUS,
+      angle: 180,
+      color: FIRST_RING_COLOR,
+      ring: "inner",
+    },
+    {
+      letter: "A",
+      radius: FIRST_RING_RADIUS,
+      angle: 270,
+      color: FIRST_RING_COLOR,
+      ring: "inner",
+    },
+
+    // Second ring
+    {
+      letter: "M",
+      radius: SECOND_RING_RADIUS,
+      angle: 0,
+      color: SECOND_RING_COLOR,
+      ring: "middle",
+    },
+    {
+      letter: "G",
+      radius: SECOND_RING_RADIUS,
+      angle: 60,
+      color: SECOND_RING_COLOR,
+      ring: "middle",
+    },
+    {
+      letter: "R",
+      radius: SECOND_RING_RADIUS,
+      angle: 120,
+      color: SECOND_RING_COLOR,
+      ring: "middle",
+    },
+    {
+      letter: "L",
+      radius: SECOND_RING_RADIUS,
+      angle: 180,
+      color: SECOND_RING_COLOR,
+      ring: "middle",
+    },
+    {
+      letter: "O",
+      radius: SECOND_RING_RADIUS,
+      angle: 210,
+      color: SECOND_RING_COLOR,
+      ring: "middle",
+    },
+    {
+      letter: "E",
+      radius: SECOND_RING_RADIUS,
+      angle: 270,
+      color: SECOND_RING_COLOR,
+      ring: "middle",
+    },
+
+    // Third ring
+    {
+      letter: "E",
+      radius: THIRD_RING_RADIUS,
+      angle: 0,
+      color: THIRD_RING_COLOR,
+      ring: "outer",
+    },
+    {
+      letter: "E",
+      radius: THIRD_RING_RADIUS,
+      angle: 60,
+      color: THIRD_RING_COLOR,
+      ring: "outer",
+    },
+    {
+      letter: "U",
+      radius: THIRD_RING_RADIUS,
+      angle: 120,
+      color: THIRD_RING_COLOR,
+      ring: "outer",
+    },
+    {
+      letter: "D",
+      radius: THIRD_RING_RADIUS,
+      angle: 180,
+      color: THIRD_RING_COLOR,
+      ring: "outer",
+    },
+    {
+      letter: "P",
+      radius: THIRD_RING_RADIUS,
+      angle: 210,
+      color: THIRD_RING_COLOR,
+      ring: "outer",
+    },
+    {
+      letter: "P",
+      radius: THIRD_RING_RADIUS,
+      angle: 270,
+      color: THIRD_RING_COLOR,
+      ring: "outer",
+    },
+
+    // Fourth ring
+    {
+      letter: "M",
+      radius: FOURTH_RING_RADIUS,
+      angle: 60,
+      color: FOURTH_RING_COLOR,
+      ring: "fourth",
+    },
+    {
+      letter: "B",
+      radius: FOURTH_RING_RADIUS,
+      angle: 120,
+      color: FOURTH_RING_COLOR,
+      ring: "fourth",
+    },
+    {
+      letter: "A",
+      radius: FOURTH_RING_RADIUS,
+      angle: 210,
+      color: FOURTH_RING_COLOR,
+      ring: "fourth",
+    },
+
+    // Fifth ring
+    {
+      letter: "S",
+      radius: FIFTH_RING_RADIUS,
+      angle: 60,
+      color: FIFTH_RING_COLOR,
+      ring: "fifth",
+    },
+    {
+      letter: "Y",
+      radius: FIFTH_RING_RADIUS,
+      angle: 120,
+      color: FIFTH_RING_COLOR,
+      ring: "fifth",
+    },
+    {
+      letter: "L",
+      radius: FIFTH_RING_RADIUS,
+      angle: 210,
+      color: FIFTH_RING_COLOR,
+      ring: "fifth",
+    },
+  ],
+  rings: {
+    inner: {
+      position: 0,
+      targetPosition: 0,
+      radius: FIRST_RING_RADIUS,
+      color: FIRST_RING_COLOR,
+    },
+    middle: {
+      position: 0,
+      targetPosition: 0,
+      radius: SECOND_RING_RADIUS,
+      color: SECOND_RING_COLOR,
+    },
+    outer: {
+      position: 0,
+      targetPosition: 0,
+      radius: THIRD_RING_RADIUS,
+      color: THIRD_RING_COLOR,
+    },
+    fourth: {
+      position: 0,
+      targetPosition: 0,
+      radius: FOURTH_RING_RADIUS,
+      color: FOURTH_RING_COLOR,
+    },
+    fifth: {
+      position: 0,
+      targetPosition: 0,
+      radius: FIFTH_RING_RADIUS,
+      color: FIFTH_RING_COLOR,
+    },
+  },
+  foundWords: new Set(),
+  numWordsInGrandAlignment: 5,
+  score: 0,
+  maxScore: 99,
+  dragState: null,
+  selectedRing: null,
+  center: { x: 300, y: 300 },
+  sun: { letter: "R", radius: 20, color: "#ffdd44" },
+  systemRotation: 0,
+  hoveredArrow: null,
+};

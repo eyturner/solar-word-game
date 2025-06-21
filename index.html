@@ -4,667 +4,25 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Solar Word Game - Canvas Version</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 10px;
-                background: #0a0a2e;
-                color: white;
-                font-family: Arial, sans-serif;
-                min-height: 100vh;
-                /* Prevent zoom on input focus on iOS */
-                -webkit-text-size-adjust: 100%;
-            }
-
-            .game-layout {
-                display: flex;
-                gap: 20px;
-                max-width: 1200px;
-                margin: 0 auto;
-                align-items: flex-start;
-            }
-
-            .game-area {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                min-width: 0; /* Prevent flex overflow */
-            }
-
-            .sidebar {
-                width: 300px;
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            #score-panel {
-                background: #1a1a3e;
-                border-radius: 8px;
-                padding: 20px;
-                text-align: center;
-                cursor: pointer;
-            }
-
-            #score-panel h2 {
-                margin: 0 0 10px 0;
-                font-size: 28px;
-                color: #ffdd44;
-            }
-
-            .rank {
-                font-size: 18px;
-                color: #4ecdc4;
-                margin-bottom: 5px;
-            }
-
-            .score {
-                font-size: 16px;
-                color: #ccc;
-            }
-
-            .word-bank {
-                background: #1a1a3e;
-                border-radius: 8px;
-                padding: 20px;
-                flex: 1;
-            }
-
-            .word-bank h3 {
-                margin: 0 0 15px 0;
-                text-align: center;
-            }
-
-            #gameCanvas {
-                border: 2px solid #444;
-                border-radius: 10px;
-                cursor: pointer;
-                background: radial-gradient(
-                    circle at center,
-                    #1a1a4e 0%,
-                    #0a0a2e 70%
-                );
-                max-width: 100%;
-                height: auto;
-            }
-
-            .controls {
-                margin: 20px 0;
-                text-align: center;
-                max-width: 500px;
-                width: 100%;
-            }
-
-            .instructions {
-                margin: 20px 0;
-                padding: 15px;
-                background: #1a1a3e;
-                border-radius: 8px;
-                max-width: 500px;
-                width: 100%;
-                box-sizing: border-box;
-                font-size: 14px;
-                text-align: center;
-            }
-
-            .keyboard-hint {
-                background: #2a2a5e;
-                border-radius: 4px;
-                padding: 10px;
-                font-size: 12px;
-                margin-top: 10px;
-            }
-
-            button {
-                margin: 5px;
-                padding: 12px 16px;
-                background: #444;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 14px;
-                /* Better touch targets */
-                min-height: 44px;
-                min-width: 44px;
-            }
-
-            button:hover {
-                background: #666;
-            }
-
-            button:active {
-                background: #555;
-                transform: scale(0.95);
-            }
-
-            .check-button {
-                background: #28a745 !important;
-                font-size: 14px;
-                padding: 12px 20px;
-                margin: 5px;
-                font-weight: bold;
-            }
-
-            .found-words {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 8px;
-                margin-top: 10px;
-            }
-
-            .word-item {
-                background: #2a2a5e;
-                padding: 8px 12px;
-                border-radius: 4px;
-                font-size: 14px;
-                /* Better touch interaction */
-                min-height: 32px;
-                display: flex;
-                align-items: center;
-            }
-
-            .results {
-                margin: 20px 0;
-                padding: 15px;
-                background: #2a2a5e;
-                border-radius: 8px;
-                max-width: 500px;
-                width: 100%;
-                box-sizing: border-box;
-                font-size: 14px;
-                line-height: 1.5;
-                /* Better text readability on mobile */
-                word-wrap: break-word;
-                overflow-wrap: break-word;
-            }
-
-            h1 {
-                text-align: center;
-                margin-bottom: 20px;
-                font-size: clamp(24px, 5vw, 32px);
-                padding: 0 10px;
-            }
-
-            details {
-                text-align: left;
-            }
-
-            details[open] {
-                text-align: center;
-            }
-
-            .ranks-dialog {
-                margin: auto;
-                padding: 0;
-                border: none;
-                border-radius: 12px;
-                background: transparent;
-                width: 600px;
-                height: 600px;
-                overflow: visible;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            }
-
-            .ranks-dialog::backdrop {
-                background: rgba(10, 10, 46, 0.8);
-                backdrop-filter: blur(8px);
-                -webkit-backdrop-filter: blur(8px); /* Safari support */
-            }
-
-            /* Animation support for dialog */
-            .ranks-dialog[open] {
-                animation: dialogSlideIn 0.3s ease-out;
-            }
-
-            .ranks-dialog.closing {
-                animation: dialogSlideOut 0.3s ease-in;
-            }
-
-            @keyframes dialogSlideIn {
-                from {
-                    opacity: 0;
-                    transform: scale(0.9) translateY(-10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: scale(1) translateY(0);
-                }
-            }
-
-            @keyframes dialogSlideOut {
-                from {
-                    opacity: 1;
-                    transform: scale(1) translateY(0);
-                }
-                to {
-                    opacity: 0;
-                    transform: scale(0.9) translateY(-10px);
-                }
-            }
-
-            .dialog-content {
-                background: linear-gradient(135deg, #1a1a3e 0%, #2a2a5e 100%);
-                border: 2px solid #4ecdc4;
-                border-radius: 12px;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
-            }
-
-            .dialog-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 20px 25px;
-                background: linear-gradient(90deg, #ffdd44, #ffaa00);
-                color: #333;
-                border-bottom: 2px solid #4ecdc4;
-                flex-shrink: 0;
-            }
-
-            .dialog-header h2 {
-                margin: 0;
-                font-size: 24px;
-                font-weight: bold;
-            }
-
-            .close-button {
-                background: none;
-                border: none;
-                font-size: 28px;
-                color: #333;
-                cursor: pointer;
-                padding: 0;
-                width: 40px;
-                height: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                transition: all 0.2s ease;
-                min-height: auto;
-                min-width: auto;
-            }
-
-            .close-button:hover {
-                background: rgba(0, 0, 0, 0.1);
-                transform: scale(1.1);
-            }
-
-            .dialog-body {
-                padding: 25px;
-                flex: 1;
-                overflow-y: auto;
-            }
-
-            .ranks-grid {
-                display: grid;
-                gap: 15px;
-                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            }
-
-            .rank-item {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-                padding: 15px;
-                background: rgba(255, 255, 255, 0.05);
-                border: 1px solid rgba(78, 205, 196, 0.3);
-                border-radius: 8px;
-                transition: all 0.3s ease;
-                position: relative;
-                overflow: hidden;
-            }
-
-            .rank-item::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(78, 205, 196, 0.1), transparent);
-                transition: left 0.5s ease;
-            }
-
-            .rank-item:hover {
-                border-color: #4ecdc4;
-                background: rgba(78, 205, 196, 0.1);
-                transform: translateY(-2px);
-            }
-
-            .rank-item:hover::before {
-                left: 100%;
-            }
-
-            .rank-item.beginner {
-                border-color: rgba(255, 107, 107, 0.5);
-            }
-
-            .rank-item.legendary {
-                border-color: rgba(255, 221, 68, 0.8);
-                background: linear-gradient(135deg, rgba(255, 221, 68, 0.1), rgba(255, 170, 0, 0.1));
-            }
-
-            .rank-item.legendary::after {
-                content: '✨';
-                position: absolute;
-                top: 5px;
-                right: 10px;
-                font-size: 12px;
-                opacity: 0.7;
-            }
-
-            .rank-icon {
-                font-size: 28px;
-                width: 45px;
-                height: 45px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 50%;
-                flex-shrink: 0;
-            }
-
-            .rank-info {
-                flex: 1;
-                color: white;
-            }
-
-            .rank-info h3 {
-                margin: 0 0 5px 0;
-                font-size: 16px;
-                color: #4ecdc4;
-                font-weight: bold;
-            }
-
-            .rank-info p {
-                margin: 0 0 5px 0;
-                font-size: 13px;
-                color: #ffdd44;
-                font-weight: bold;
-            }
-
-            .rank-description {
-                font-size: 11px;
-                color: #ccc;
-                font-style: italic;
-                line-height: 1.3;
-            }
-
-            /* Tablet adjustments */
-            @media (max-width: 768px) and (min-width: 481px) {
-                .ranks-dialog {
-                    width: 90vw;
-                    height: 80vh;
-                    max-width: 600px;
-                    max-height: 600px;
-                }
-
-                .ranks-grid {
-                    grid-template-columns: 1fr;
-                }
-            }
-
-            /* Mobile phones - nearly full screen */
-            @media (max-width: 480px) {
-                .ranks-dialog {
-                    width: 95vw;
-                    height: 90vh;
-                    border-radius: 8px;
-                    margin: auto;
-                }
-
-                .dialog-header {
-                    padding: 15px 20px;
-                }
-
-                .dialog-header h2 {
-                    font-size: 20px;
-                }
-
-                .close-button {
-                    font-size: 24px;
-                    width: 35px;
-                    height: 35px;
-                }
-
-                .dialog-body {
-                    padding: 20px;
-                }
-
-                .ranks-grid {
-                    grid-template-columns: 1fr;
-                    gap: 12px;
-                }
-
-                .rank-item {
-                    padding: 12px;
-                    gap: 12px;
-                }
-
-                .rank-icon {
-                    font-size: 24px;
-                    width: 40px;
-                    height: 40px;
-                }
-
-                .rank-info h3 {
-                    font-size: 15px;
-                }
-
-                .rank-info p {
-                    font-size: 12px;
-                }
-
-                .rank-description {
-                    font-size: 10px;
-                }
-            }
-
-            /* Very small phones - full screen */
-            @media (max-width: 360px) {
-                .ranks-dialog {
-                    width: 100vw;
-                    height: 100vh;
-                    border-radius: 0;
-                }
-
-                .dialog-content {
-                    border-radius: 0;
-                    border: none;
-                    border-top: 2px solid #4ecdc4;
-                }
-            }
-
-            /* Smooth scrolling for the dialog body */
-            .dialog-body::-webkit-scrollbar {
-                width: 8px;
-            }
-
-            .dialog-body::-webkit-scrollbar-track {
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 4px;
-            }
-
-            .dialog-body::-webkit-scrollbar-thumb {
-                background: #4ecdc4;
-                border-radius: 4px;
-            }
-
-            .dialog-body::-webkit-scrollbar-thumb:hover {
-                background: #45b7d1;
-            }
-
-            /* Mobile-specific optimizations */
-            @media (max-width: 768px) {
-                body {
-                    padding: 5px;
-                }
-
-                .game-layout {
-                    flex-direction: column;
-                    gap: 15px;
-                }
-
-                .sidebar {
-                    width: 100%;
-                    order: -1;
-                }
-
-                #score-panel {
-                    display: flex;
-                    justify-content: space-around;
-                    align-items: center;
-                    text-align: left;
-                    padding: 15px;
-                }
-
-                #score-panel h2 {
-                    font-size: 24px;
-                    margin: 0;
-                }
-
-                .rank,
-                .score {
-                    font-size: 14px;
-                }
-
-                #gameCanvas {
-                    width: 100%;
-                    max-width: 500px;
-                    height: auto;
-                }
-
-                .instructions {
-                    font-size: 13px;
-                    padding: 12px;
-                    margin: 10px 0;
-                }
-
-                .keyboard-hint {
-                    font-size: 11px;
-                    padding: 8px;
-                }
-
-                .controls {
-                    margin: 15px 0;
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    gap: 10px;
-                }
-
-                button {
-                    flex: 1;
-                    min-width: 120px;
-                    max-width: 200px;
-                    margin: 2px;
-                }
-
-                .word-bank {
-                    padding: 15px;
-                }
-
-                .word-bank h3 {
-                    font-size: 18px;
-                    margin-bottom: 10px;
-                }
-
-                .found-words {
-                    gap: 6px;
-                }
-
-                .word-item {
-                    font-size: 13px;
-                    padding: 6px 10px;
-                }
-
-                .results {
-                    font-size: 13px;
-                    padding: 12px;
-                    margin: 15px 0;
-                }
-            }
-
-            /* Very small screens (phones in portrait) */
-            @media (max-width: 480px) {
-                h1 {
-                    font-size: 24px;
-                    margin-bottom: 15px;
-                }
-
-                #score-panel {
-                    flex-direction: column;
-                    gap: 8px;
-                    text-align: center;
-                }
-
-                #score-panel > div {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    width: 100%;
-                }
-
-                .instructions {
-                    font-size: 12px;
-                }
-
-                .keyboard-hint {
-                    display: none; /* Hide on very small screens */
-                }
-
-                #gameCanvas {
-                    max-width: 400px;
-                }
-
-                .controls {
-                    flex-direction: column;
-                }
-
-                button {
-                    width: 100%;
-                    max-width: none;
-                    margin: 3px 0;
-                }
-
-            /* Landscape orientation on mobile */
-            @media (max-height: 500px) and (orientation: landscape) {
-                .game-layout {
-                    flex-direction: row;
-                }
-
-                .sidebar {
-                    width: 250px;
-                    order: 0;
-                }
-
-                h1 {
-                    margin-bottom: 10px;
-                    font-size: 20px;
-                }
-
-                .instructions {
-                    margin: 10px 0;
-                    padding: 10px;
-                }
-
-                .keyboard-hint {
-                    display: none;
-                }
-            }
-        </style>
+        <link rel="stylesheet" href="./styles.css" />
     </head>
     <body>
         <h1 style="text-align: center; margin-bottom: 30px">Solar Word Game</h1>
 
         <div class="game-layout">
             <div class="game-area">
+                <canvas id="gameCanvas" width="600" height="600"></canvas>
+
+                <div class="controls">
+                    <button class="check-button" onclick="checkAllPositions()">
+                        Check for Words (Space)
+                    </button>
+                </div>
+
+                <div id="results" class="results" style="display: none"></div>
+            </div>
+
+            <div class="sidebar">
                 <div class="instructions">
                     <details>
                         <summary>
@@ -684,19 +42,6 @@
                         </div>
                     </details>
                 </div>
-
-                <canvas id="gameCanvas" width="600" height="600"></canvas>
-
-                <div class="controls">
-                    <button class="check-button" onclick="checkAllPositions()">
-                        Check for Words (Space)
-                    </button>
-                </div>
-
-                <div id="results" class="results" style="display: none"></div>
-            </div>
-
-            <div class="sidebar">
                 <div id="score-panel">
                     <div>
                         <h2 id="playerScore">0</h2>
@@ -725,7 +70,7 @@
 
                 <div class="dialog-body">
                     <div class="ranks-grid">
-                        <div class="rank-item beginner">
+                        <div class="rank-item current">
                             <div class="rank-icon">🌱</div>
                             <div class="rank-info">
                                 <h3>Beginner</h3>
@@ -737,7 +82,7 @@
                             <div class="rank-icon">👍</div>
                             <div class="rank-info">
                                 <h3>Good</h3>
-                                <p>1+ points</p>
+                                <p id="goodPoints">1+ points</p>
                             </div>
                         </div>
 
@@ -745,7 +90,7 @@
                             <div class="rank-icon">⭐</div>
                             <div class="rank-info">
                                 <h3>Great</h3>
-                                <p>10+ points</p>
+                                <p id="greatPoints">10+ points</p>
                             </div>
                         </div>
 
@@ -753,7 +98,7 @@
                             <div class="rank-icon">🚀</div>
                             <div class="rank-info">
                                 <h3>Voyager</h3>
-                                <p>20+ points</p>
+                                <p id="voyagerPoints">20+ points</p>
                             </div>
                         </div>
 
@@ -761,7 +106,7 @@
                             <div class="rank-icon">✨</div>
                             <div class="rank-info">
                                 <h3>Stellar</h3>
-                                <p>30+ points</p>
+                                <p id="stellarPoints">30+ points</p>
                             </div>
                         </div>
 
@@ -769,7 +114,7 @@
                             <div class="rank-icon">🔴</div>
                             <div class="rank-info">
                                 <h3>Red Giant</h3>
-                                <p>40+ points</p>
+                                <p id="redGiantPoints">40+ points</p>
                             </div>
                         </div>
 
@@ -777,15 +122,7 @@
                             <div class="rank-icon">⚪</div>
                             <div class="rank-info">
                                 <h3>White Dwarf</h3>
-                                <p>50+ points</p>
-                            </div>
-                        </div>
-
-                        <div class="rank-item">
-                            <div class="rank-icon">💫</div>
-                            <div class="rank-info">
-                                <h3>Neutron Star</h3>
-                                <p>60+ points</p>
+                                <p id="whiteDwarfPoints">50+ points</p>
                             </div>
                         </div>
 
@@ -793,7 +130,15 @@
                             <div class="rank-icon">💥</div>
                             <div class="rank-info">
                                 <h3>Supernova</h3>
-                                <p>70+ points</p>
+                                <p id="supernovaPoints">70+ points</p>
+                            </div>
+                        </div>
+
+                        <div class="rank-item">
+                            <div class="rank-icon">💫</div>
+                            <div class="rank-info">
+                                <h3>Neutron Star</h3>
+                                <p id="neutronStarPoints">60+ points</p>
                             </div>
                         </div>
 
@@ -801,13 +146,14 @@
                             <div class="rank-icon">🕳️</div>
                             <div class="rank-info">
                                 <h3>Black Hole</h3>
-                                <p>80+ points</p>
+                                <p id="blackHolePoints">80+ points</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </dialog>
+
         <script>
             // Constants - Ring diameters, colors, etc.
             const FIRST_RING_COLOR = "#ff6b6b";
@@ -835,160 +181,139 @@
                 letters: [
                     // First ring
                     {
-                        letter: "F",
+                        letter: "E",
                         radius: FIRST_RING_RADIUS,
                         angle: 0,
                         color: FIRST_RING_COLOR,
                         ring: "inner",
                     },
-                    // {
-                    //     letter: "A",
-                    //     radius: FIRST_RING_RADIUS,
-                    //     angle: 60,
-                    //     color: FIRST_RING_COLOR,
-                    //     ring: "inner",
-                    // },
                     {
-                        letter: "I",
+                        letter: "L",
                         radius: FIRST_RING_RADIUS,
-                        angle: 120,
+                        angle: 90,
                         color: FIRST_RING_COLOR,
                         ring: "inner",
                     },
                     {
-                        letter: "O",
+                        letter: "A",
                         radius: FIRST_RING_RADIUS,
                         angle: 180,
                         color: FIRST_RING_COLOR,
                         ring: "inner",
                     },
-                    // {
-                    //     letter: "I",
-                    //     radius: FIRST_RING_RADIUS,
-                    //     angle: 240,
-                    //     color: FIRST_RING_COLOR,
-                    //     ring: "inner",
-                    // },
                     {
-                        letter: "U",
+                        letter: "A",
                         radius: FIRST_RING_RADIUS,
-                        angle: 300,
+                        angle: 270,
                         color: FIRST_RING_COLOR,
                         ring: "inner",
                     },
 
                     // Second ring
                     {
-                        letter: "S",
+                        letter: "M",
                         radius: SECOND_RING_RADIUS,
-                        angle: 30,
+                        angle: 0,
                         color: SECOND_RING_COLOR,
                         ring: "middle",
                     },
-                    // {
-                    //     letter: "C",
-                    //     radius: SECOND_RING_RADIUS,
-                    //     angle: 60,
-                    //     color: SECOND_RING_COLOR,
-                    //     ring: "middle",
-                    // },
+                    {
+                        letter: "G",
+                        radius: SECOND_RING_RADIUS,
+                        angle: 60,
+                        color: SECOND_RING_COLOR,
+                        ring: "middle",
+                    },
                     {
                         letter: "R",
-                        radius: SECOND_RING_RADIUS,
-                        angle: 90,
-                        color: SECOND_RING_COLOR,
-                        ring: "middle",
-                    },
-                    {
-                        letter: "P",
                         radius: SECOND_RING_RADIUS,
                         angle: 120,
                         color: SECOND_RING_COLOR,
                         ring: "middle",
                     },
                     {
-                        letter: "W",
+                        letter: "L",
                         radius: SECOND_RING_RADIUS,
                         angle: 180,
                         color: SECOND_RING_COLOR,
                         ring: "middle",
                     },
                     {
-                        letter: "L",
+                        letter: "O",
                         radius: SECOND_RING_RADIUS,
                         angle: 210,
                         color: SECOND_RING_COLOR,
                         ring: "middle",
                     },
-                    // {
-                    //     letter: "L",
-                    //     radius: SECOND_RING_RADIUS,
-                    //     angle: 240,
-                    //     color: SECOND_RING_COLOR,
-                    //     ring: "middle",
-                    // },
                     {
-                        letter: "T",
+                        letter: "E",
                         radius: SECOND_RING_RADIUS,
-                        angle: 300,
+                        angle: 270,
                         color: SECOND_RING_COLOR,
                         ring: "middle",
                     },
 
                     // Third ring
                     {
-                        letter: "I",
+                        letter: "E",
                         radius: THIRD_RING_RADIUS,
-                        angle: 30,
-                        color: THIRD_RING_COLOR,
-                        ring: "outer",
-                    },
-                    {
-                        letter: "O",
-                        radius: THIRD_RING_RADIUS,
-                        angle: 90,
+                        angle: 0,
                         color: THIRD_RING_COLOR,
                         ring: "outer",
                     },
                     {
                         letter: "E",
                         radius: THIRD_RING_RADIUS,
+                        angle: 60,
+                        color: THIRD_RING_COLOR,
+                        ring: "outer",
+                    },
+                    {
+                        letter: "U",
+                        radius: THIRD_RING_RADIUS,
+                        angle: 120,
+                        color: THIRD_RING_COLOR,
+                        ring: "outer",
+                    },
+                    {
+                        letter: "D",
+                        radius: THIRD_RING_RADIUS,
                         angle: 180,
                         color: THIRD_RING_COLOR,
                         ring: "outer",
                     },
                     {
-                        letter: "I",
+                        letter: "P",
                         radius: THIRD_RING_RADIUS,
                         angle: 210,
+                        color: THIRD_RING_COLOR,
+                        ring: "outer",
+                    },
+                    {
+                        letter: "P",
+                        radius: THIRD_RING_RADIUS,
+                        angle: 270,
                         color: THIRD_RING_COLOR,
                         ring: "outer",
                     },
 
                     // Fourth ring
                     {
-                        letter: "R",
+                        letter: "M",
                         radius: FOURTH_RING_RADIUS,
-                        angle: 30,
+                        angle: 60,
                         color: FOURTH_RING_COLOR,
                         ring: "fourth",
                     },
                     {
-                        letter: "S",
+                        letter: "B",
                         radius: FOURTH_RING_RADIUS,
-                        angle: 90,
+                        angle: 120,
                         color: FOURTH_RING_COLOR,
                         ring: "fourth",
                     },
                     {
-                        letter: "R",
-                        radius: FOURTH_RING_RADIUS,
-                        angle: 180,
-                        color: FOURTH_RING_COLOR,
-                        ring: "fourth",
-                    },
-                    {
-                        letter: "L",
+                        letter: "A",
                         radius: FOURTH_RING_RADIUS,
                         angle: 210,
                         color: FOURTH_RING_COLOR,
@@ -997,21 +322,21 @@
 
                     // Fifth ring
                     {
-                        letter: "I",
+                        letter: "S",
                         radius: FIFTH_RING_RADIUS,
-                        angle: 30,
-                        color: FIFTH_RING_COLOR,
-                        ring: "fifth",
-                    },
-                    {
-                        letter: "E",
-                        radius: FIFTH_RING_RADIUS,
-                        angle: 90,
+                        angle: 60,
                         color: FIFTH_RING_COLOR,
                         ring: "fifth",
                     },
                     {
                         letter: "Y",
+                        radius: FIFTH_RING_RADIUS,
+                        angle: 120,
+                        color: FIFTH_RING_COLOR,
+                        ring: "fifth",
+                    },
+                    {
+                        letter: "L",
                         radius: FIFTH_RING_RADIUS,
                         angle: 210,
                         color: FIFTH_RING_COLOR,
@@ -1050,15 +375,16 @@
                         color: FIFTH_RING_COLOR,
                     },
                 },
-                shuffled: false,
                 foundWords: new Set(),
                 numWordsInGrandAlignment: 5,
                 score: 0,
-                maxScore: 142,
+                maxScore: 99,
                 dragState: null,
                 selectedRing: null,
                 center: { x: 300, y: 300 },
-                sun: { letter: "L", radius: 20, color: "#ffdd44" },
+                sun: { letter: "R", radius: 20, color: "#ffdd44" },
+                systemRotation: 0,
+                hoveredArrow: null,
             };
 
             // Word list
@@ -1128,14 +454,14 @@
                 // Draw reading direction indicators
                 drawReadingIndicators();
 
-                // Shuffle planets
-                shufflePlanets();
-
                 // Draw planets
                 drawPlanets();
 
                 // Draw sun
                 drawSun();
+
+                // Draw rotation arrows
+                drawRotationArrows();
 
                 // Draw any word visualization
                 drawWordLines();
@@ -1298,8 +624,87 @@
             }
 
             function drawWordLines() {
+                // TODO
                 // This will show visual connections for found words
                 // Implementation can be added later for visual feedback
+            }
+
+            function drawRotationArrows() {
+                const arrowSize = 30;
+                const cornerOffset = 15;
+                const canvasWidth = canvas.width;
+                const canvasHeight = canvas.height;
+
+                // Left top arrow (counter-clockwise)
+                const leftX = cornerOffset + arrowSize / 2;
+                const leftY = cornerOffset + arrowSize / 2;
+                drawRotationArrow(leftX, leftY, "left");
+
+                // Right top arrow (clockwise)
+                const rightX = canvasWidth - cornerOffset - arrowSize / 2;
+                const rightY = cornerOffset + arrowSize / 2;
+                drawRotationArrow(rightX, rightY, "right");
+            }
+
+            function drawRotationArrow(x, y, direction) {
+                const radius = 25;
+                const isHovered = gameState.hoveredArrow === direction;
+
+                ctx.save();
+
+                // Draw background circle
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = isHovered
+                    ? "rgba(78, 205, 196, 0.3)"
+                    : "rgba(26, 26, 62, 0.9)";
+                ctx.fill();
+
+                // Draw border
+                ctx.strokeStyle = isHovered ? "#ffdd44" : "#4ecdc4";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Draw the arrow symbol
+                ctx.strokeStyle = isHovered ? "#ffdd44" : "#4ecdc4";
+                ctx.fillStyle = isHovered ? "#ffdd44" : "#4ecdc4";
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = "round";
+                ctx.lineJoin = "round";
+
+                if (direction === "left") {
+                    // Counter-clockwise: upward triangle on the left with arc connecting to bottom
+
+                    // Draw upward-pointing triangle on the left
+                    ctx.beginPath();
+                    ctx.moveTo(x - 8, y - 12); // Top point
+                    ctx.lineTo(x - 12, y - 4); // Bottom left
+                    ctx.lineTo(x - 4, y - 4); // Bottom right
+                    ctx.closePath();
+                    ctx.fill();
+
+                    // Draw arc connecting from triangle bottom, sweeping counter-clockwise
+                    ctx.beginPath();
+                    ctx.arc(x, y, 10, Math.PI * 1.2, Math.PI * 0.2, false);
+                    ctx.stroke();
+                } else {
+                    // Clockwise: upward triangle on the right with arc connecting to bottom
+
+                    // Draw upward-pointing triangle on the right
+                    ctx.beginPath();
+                    ctx.moveTo(x + 8, y - 12); // Top point
+                    ctx.lineTo(x + 4, y - 4); // Bottom left
+                    ctx.lineTo(x + 12, y - 4); // Bottom right
+                    ctx.closePath();
+                    ctx.fill();
+
+                    // Draw arc connecting from triangle bottom, sweeping clockwise
+                    ctx.beginPath();
+                    ctx.arc(x, y, 10, Math.PI * 0.8, Math.PI * 1.8, false);
+                    ctx.stroke();
+                }
+
+                ctx.restore();
             }
 
             // Input handling
@@ -1364,6 +769,23 @@
                 const scaleY = canvas.height / rect.height;
                 const x = (e.clientX - rect.left) * scaleX;
                 const y = (e.clientY - rect.top) * scaleY;
+
+                // Check arrow hover
+                const prevHoveredArrow = gameState.hoveredArrow;
+                gameState.hoveredArrow = getHoveredArrow(x, y);
+
+                // Update cursor
+                if (gameState.hoveredArrow) {
+                    canvas.style.cursor = "pointer";
+                } else if (!gameState.dragState) {
+                    canvas.style.cursor = "pointer";
+                }
+
+                // Redraw if hover state changed
+                if (prevHoveredArrow !== gameState.hoveredArrow) {
+                    // No need to call draw() here as it's called by animate()
+                }
+
                 updateDrag(x, y);
             }
 
@@ -1399,12 +821,20 @@
             }
 
             function startDrag(x, y) {
+                // Check if clicking on arrow first
+                const clickedArrow = getHoveredArrow(x, y);
+                if (clickedArrow) {
+                    const rotation = clickedArrow === "left" ? -30 : 30;
+                    rotateSystem(rotation);
+                    return; // Don't start ring drag
+                }
+
+                // Existing ring selection logic
                 const distance = Math.sqrt(
                     (x - gameState.center.x) ** 2 +
                         (y - gameState.center.y) ** 2,
                 );
 
-                // Determine which ring is being clicked
                 let targetRing = null;
                 let minDiff = Infinity;
 
@@ -1412,17 +842,13 @@
                     const ring = gameState.rings[ringName];
                     const diff = Math.abs(distance - ring.radius);
                     if (diff < 30 && diff < minDiff) {
-                        // 30px tolerance
                         minDiff = diff;
                         targetRing = ringName;
                     }
                 });
 
                 if (targetRing) {
-                    // Select the ring
                     gameState.selectedRing = targetRing;
-
-                    // Start drag for rotation
                     const angle = Math.atan2(
                         y - gameState.center.y,
                         x - gameState.center.x,
@@ -1434,7 +860,6 @@
                     };
                     canvas.style.cursor = "grabbing";
                 } else {
-                    // Click on empty space deselects
                     gameState.selectedRing = null;
                 }
             }
@@ -1536,6 +961,8 @@
                 );
                 document.getElementById("wordCount").textContent =
                     `${gameState.foundWords.size} words found`;
+
+                // TODO: update current rank highlight
             }
 
             function rotateRing(ringName, direction) {
@@ -1543,6 +970,27 @@
                 let newPosition = ring.targetPosition + direction * 30;
 
                 ring.targetPosition = newPosition;
+            }
+
+            function rotateSystem(degrees) {
+                gameState.systemRotation += degrees;
+
+                // Keep rotation between 0-360
+                while (gameState.systemRotation < 0)
+                    gameState.systemRotation += 360;
+                while (gameState.systemRotation >= 360)
+                    gameState.systemRotation -= 360;
+
+                // Rotate all rings by the specified amount
+                Object.keys(gameState.rings).forEach((ringName) => {
+                    const ring = gameState.rings[ringName];
+                    ring.targetPosition += degrees;
+
+                    // Keep positions normalized
+                    while (ring.targetPosition < 0) ring.targetPosition += 360;
+                    while (ring.targetPosition >= 360)
+                        ring.targetPosition -= 360;
+                });
             }
 
             function getLettersAtPosition(position) {
@@ -1817,20 +1265,75 @@
                 }
             }
 
-            function shufflePlanets() {
-                if (!gameState.shuffled) {
-                    const rings = gameState.rings;
-                    for (let ring of Object.keys(rings)) {
-                        let randomRotation =
-                            30 * Math.floor(12 * Math.random());
-                        rings[ring].targetPosition += randomRotation;
-                    }
-                    gameState.shuffled = true;
+            function getHoveredArrow(x, y) {
+                const arrowRadius = 25;
+                const cornerOffset = 15;
+                const arrowSize = 30;
+
+                // Left arrow position
+                const leftX = cornerOffset + arrowSize / 2;
+                const leftY = cornerOffset + arrowSize / 2;
+
+                // Right arrow position
+                const rightX = canvas.width - cornerOffset - arrowSize / 2;
+                const rightY = cornerOffset + arrowSize / 2;
+
+                // Check left arrow
+                const leftDist = Math.sqrt((x - leftX) ** 2 + (y - leftY) ** 2);
+                if (leftDist <= arrowRadius) {
+                    return "left";
                 }
+
+                // Check right arrow
+                const rightDist = Math.sqrt(
+                    (x - rightX) ** 2 + (y - rightY) ** 2,
+                );
+                if (rightDist <= arrowRadius) {
+                    return "right";
+                }
+
+                return null;
+            }
+
+            function shufflePlanets() {
+                const rings = gameState.rings;
+                for (let ring of Object.keys(rings)) {
+                    let randomRotation = 30 * Math.floor(12 * Math.random());
+                    rings[ring].targetPosition += randomRotation;
+                }
+            }
+
+            function initializeRanks() {
+                const goodPoints = document.getElementById("goodPoints");
+                const greatPoints = document.getElementById("greatPoints");
+                const voyagerPoints = document.getElementById("voyagerPoints");
+                const stellarPoints = document.getElementById("stellarPoints");
+                const redGiantPoints =
+                    document.getElementById("redGiantPoints");
+                const whiteDwarfPoints =
+                    document.getElementById("whiteDwarfPoints");
+                const supernovaPoints =
+                    document.getElementById("supernovaPoints");
+                const neutronStarPoints =
+                    document.getElementById("neutronStarPoints");
+                const blackHolePoints =
+                    document.getElementById("blackHolePoints");
+
+                goodPoints.textContent = RANKS[1].min + " points";
+                greatPoints.textContent = RANKS[2].min + " points";
+                voyagerPoints.textContent = RANKS[3].min + " points";
+                stellarPoints.textContent = RANKS[4].min + " points";
+                redGiantPoints.textContent = RANKS[5].min + " points";
+                whiteDwarfPoints.textContent = RANKS[6].min + " points";
+                supernovaPoints.textContent = RANKS[7].min + " points";
+                neutronStarPoints.textContent = RANKS[8].min + " points";
+                blackHolePoints.textContent = RANKS[9].min + "+ points";
             }
 
             // Initialize the game
             updateScoreDisplay();
+            initializeRanks();
+            shufflePlanets();
             animate();
         </script>
     </body>

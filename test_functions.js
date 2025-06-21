@@ -20,6 +20,9 @@ export function runFindAllPossibleWords(gameState, dictionary) {
     "TOR",
     "TORI",
     "WILE",
+    "LEA",
+    "LEAS",
+    "LEAL",
   ];
 
   console.log(allPossibleWords);

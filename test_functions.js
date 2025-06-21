@@ -1,4 +1,4 @@
-function runFindAllPossibleWords() {
+export function runFindAllPossibleWords(gameState, dictionary) {
   let allPossibleWords = findAllPossibleWords(
     gameState.letters,
     gameState.rings,
@@ -6,11 +6,30 @@ function runFindAllPossibleWords() {
     dictionary,
   );
 
+  // These words will give the players points, but won't contribute to the score needed for ranks
+  let wordsNotCountingTowardMaxScore = [
+    "PERI",
+    "PILI",
+    "PILY",
+    "RET",
+    "ROLF",
+    "SERE",
+    "SORI",
+    "SOT",
+    "TOLE",
+    "TOR",
+    "TORI",
+    "WILE",
+  ];
+
   console.log(allPossibleWords);
   let maxScore = 0;
   for (const word of allPossibleWords.words) {
-    if (word.length == 3) maxScore += 1;
-    else maxScore += word.length;
+    // Don't count obscure words toward the max, but allow the player to get points from them
+    if (!wordsNotCountingTowardMaxScore.includes(word)) {
+      if (word.length == 3) maxScore += 1;
+      else maxScore += word.length;
+    }
   }
   console.log("MAX:", maxScore);
 }
@@ -126,6 +145,11 @@ function getLettersAtPositionForState(
   });
 
   // Add blanks for missing rings
+  const FIRST_RING_RADIUS = 60;
+  const SECOND_RING_RADIUS = 110;
+  const THIRD_RING_RADIUS = 160;
+  const FOURTH_RING_RADIUS = 210;
+  const FIFTH_RING_RADIUS = 260;
   const RING_RADII = [
     FIRST_RING_RADIUS,
     SECOND_RING_RADIUS,

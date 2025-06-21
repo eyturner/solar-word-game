@@ -39,14 +39,15 @@
                 gap: 20px;
             }
 
-            .score-panel {
+            #score-panel {
                 background: #1a1a3e;
                 border-radius: 8px;
                 padding: 20px;
                 text-align: center;
+                cursor: pointer;
             }
 
-            .score-panel h2 {
+            #score-panel h2 {
                 margin: 0 0 10px 0;
                 font-size: 28px;
                 color: #ffdd44;
@@ -186,6 +187,319 @@
                 padding: 0 10px;
             }
 
+            details {
+                text-align: left;
+            }
+
+            details[open] {
+                text-align: center;
+            }
+
+            .ranks-dialog {
+                margin: auto;
+                padding: 0;
+                border: none;
+                border-radius: 12px;
+                background: transparent;
+                width: 600px;
+                height: 600px;
+                overflow: visible;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            }
+
+            .ranks-dialog::backdrop {
+                background: rgba(10, 10, 46, 0.8);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px); /* Safari support */
+            }
+
+            /* Animation support for dialog */
+            .ranks-dialog[open] {
+                animation: dialogSlideIn 0.3s ease-out;
+            }
+
+            .ranks-dialog.closing {
+                animation: dialogSlideOut 0.3s ease-in;
+            }
+
+            @keyframes dialogSlideIn {
+                from {
+                    opacity: 0;
+                    transform: scale(0.9) translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1) translateY(0);
+                }
+            }
+
+            @keyframes dialogSlideOut {
+                from {
+                    opacity: 1;
+                    transform: scale(1) translateY(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: scale(0.9) translateY(-10px);
+                }
+            }
+
+            .dialog-content {
+                background: linear-gradient(135deg, #1a1a3e 0%, #2a2a5e 100%);
+                border: 2px solid #4ecdc4;
+                border-radius: 12px;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+
+            .dialog-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px 25px;
+                background: linear-gradient(90deg, #ffdd44, #ffaa00);
+                color: #333;
+                border-bottom: 2px solid #4ecdc4;
+                flex-shrink: 0;
+            }
+
+            .dialog-header h2 {
+                margin: 0;
+                font-size: 24px;
+                font-weight: bold;
+            }
+
+            .close-button {
+                background: none;
+                border: none;
+                font-size: 28px;
+                color: #333;
+                cursor: pointer;
+                padding: 0;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                transition: all 0.2s ease;
+                min-height: auto;
+                min-width: auto;
+            }
+
+            .close-button:hover {
+                background: rgba(0, 0, 0, 0.1);
+                transform: scale(1.1);
+            }
+
+            .dialog-body {
+                padding: 25px;
+                flex: 1;
+                overflow-y: auto;
+            }
+
+            .ranks-grid {
+                display: grid;
+                gap: 15px;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            }
+
+            .rank-item {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 15px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(78, 205, 196, 0.3);
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .rank-item::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(78, 205, 196, 0.1), transparent);
+                transition: left 0.5s ease;
+            }
+
+            .rank-item:hover {
+                border-color: #4ecdc4;
+                background: rgba(78, 205, 196, 0.1);
+                transform: translateY(-2px);
+            }
+
+            .rank-item:hover::before {
+                left: 100%;
+            }
+
+            .rank-item.beginner {
+                border-color: rgba(255, 107, 107, 0.5);
+            }
+
+            .rank-item.legendary {
+                border-color: rgba(255, 221, 68, 0.8);
+                background: linear-gradient(135deg, rgba(255, 221, 68, 0.1), rgba(255, 170, 0, 0.1));
+            }
+
+            .rank-item.legendary::after {
+                content: '✨';
+                position: absolute;
+                top: 5px;
+                right: 10px;
+                font-size: 12px;
+                opacity: 0.7;
+            }
+
+            .rank-icon {
+                font-size: 28px;
+                width: 45px;
+                height: 45px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 50%;
+                flex-shrink: 0;
+            }
+
+            .rank-info {
+                flex: 1;
+                color: white;
+            }
+
+            .rank-info h3 {
+                margin: 0 0 5px 0;
+                font-size: 16px;
+                color: #4ecdc4;
+                font-weight: bold;
+            }
+
+            .rank-info p {
+                margin: 0 0 5px 0;
+                font-size: 13px;
+                color: #ffdd44;
+                font-weight: bold;
+            }
+
+            .rank-description {
+                font-size: 11px;
+                color: #ccc;
+                font-style: italic;
+                line-height: 1.3;
+            }
+
+            /* Tablet adjustments */
+            @media (max-width: 768px) and (min-width: 481px) {
+                .ranks-dialog {
+                    width: 90vw;
+                    height: 80vh;
+                    max-width: 600px;
+                    max-height: 600px;
+                }
+
+                .ranks-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            /* Mobile phones - nearly full screen */
+            @media (max-width: 480px) {
+                .ranks-dialog {
+                    width: 95vw;
+                    height: 90vh;
+                    border-radius: 8px;
+                    margin: auto;
+                }
+
+                .dialog-header {
+                    padding: 15px 20px;
+                }
+
+                .dialog-header h2 {
+                    font-size: 20px;
+                }
+
+                .close-button {
+                    font-size: 24px;
+                    width: 35px;
+                    height: 35px;
+                }
+
+                .dialog-body {
+                    padding: 20px;
+                }
+
+                .ranks-grid {
+                    grid-template-columns: 1fr;
+                    gap: 12px;
+                }
+
+                .rank-item {
+                    padding: 12px;
+                    gap: 12px;
+                }
+
+                .rank-icon {
+                    font-size: 24px;
+                    width: 40px;
+                    height: 40px;
+                }
+
+                .rank-info h3 {
+                    font-size: 15px;
+                }
+
+                .rank-info p {
+                    font-size: 12px;
+                }
+
+                .rank-description {
+                    font-size: 10px;
+                }
+            }
+
+            /* Very small phones - full screen */
+            @media (max-width: 360px) {
+                .ranks-dialog {
+                    width: 100vw;
+                    height: 100vh;
+                    border-radius: 0;
+                }
+
+                .dialog-content {
+                    border-radius: 0;
+                    border: none;
+                    border-top: 2px solid #4ecdc4;
+                }
+            }
+
+            /* Smooth scrolling for the dialog body */
+            .dialog-body::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            .dialog-body::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 4px;
+            }
+
+            .dialog-body::-webkit-scrollbar-thumb {
+                background: #4ecdc4;
+                border-radius: 4px;
+            }
+
+            .dialog-body::-webkit-scrollbar-thumb:hover {
+                background: #45b7d1;
+            }
+
             /* Mobile-specific optimizations */
             @media (max-width: 768px) {
                 body {
@@ -202,7 +516,7 @@
                     order: -1;
                 }
 
-                .score-panel {
+                #score-panel {
                     display: flex;
                     justify-content: space-around;
                     align-items: center;
@@ -210,7 +524,7 @@
                     padding: 15px;
                 }
 
-                .score-panel h2 {
+                #score-panel h2 {
                     font-size: 24px;
                     margin: 0;
                 }
@@ -284,13 +598,13 @@
                     margin-bottom: 15px;
                 }
 
-                .score-panel {
+                #score-panel {
                     flex-direction: column;
                     gap: 8px;
                     text-align: center;
                 }
 
-                .score-panel > div {
+                #score-panel > div {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
@@ -318,7 +632,6 @@
                     max-width: none;
                     margin: 3px 0;
                 }
-            }
 
             /* Landscape orientation on mobile */
             @media (max-height: 500px) and (orientation: landscape) {
@@ -353,16 +666,23 @@
         <div class="game-layout">
             <div class="game-area">
                 <div class="instructions">
-                    <strong>How to play:</strong> Click on an orbital ring to
-                    select it, then use arrow keys to rotate. You can also click
-                    and drag rings to rotate them. Find words by aligning
-                    letters!
+                    <details>
+                        <summary>
+                            <strong>How to play:</strong>
+                        </summary>
+                        <p>
+                            Click on an orbital ring to select it, then use
+                            arrow keys to rotate. You can also click and drag
+                            rings to rotate them. Find words by aligning
+                            letters!
+                        </p>
 
-                    <div class="keyboard-hint">
-                        <strong>Keyboard controls:</strong><br />
-                        Click ring and press arrows keys to rotate<br />
-                        Space bar to check for words
-                    </div>
+                        <div class="keyboard-hint">
+                            <strong>Keyboard controls:</strong><br />
+                            Click ring and press arrows keys to rotate<br />
+                            Space bar to check for words
+                        </div>
+                    </details>
                 </div>
 
                 <canvas id="gameCanvas" width="600" height="600"></canvas>
@@ -371,16 +691,13 @@
                     <button class="check-button" onclick="checkAllPositions()">
                         Check for Words (Space)
                     </button>
-                    <!-- <button onclick="toggleAutoCheck()">
-                        Auto-Check: <span id="autoCheckStatus">OFF</span>
-                    </button> -->
                 </div>
 
                 <div id="results" class="results" style="display: none"></div>
             </div>
 
             <div class="sidebar">
-                <div class="score-panel">
+                <div id="score-panel">
                     <div>
                         <h2 id="playerScore">0</h2>
                         <div class="rank" id="playerRank">Beginner</div>
@@ -397,6 +714,100 @@
             </div>
         </div>
 
+        <dialog id="ranksDialog" class="ranks-dialog">
+            <div class="dialog-content">
+                <div class="dialog-header">
+                    <h2>Stellar Progression</h2>
+                    <button class="close-button" onclick="closeRanksDialog()">
+                        ×
+                    </button>
+                </div>
+
+                <div class="dialog-body">
+                    <div class="ranks-grid">
+                        <div class="rank-item beginner">
+                            <div class="rank-icon">🌱</div>
+                            <div class="rank-info">
+                                <h3>Beginner</h3>
+                                <p>0 points</p>
+                            </div>
+                        </div>
+
+                        <div class="rank-item">
+                            <div class="rank-icon">👍</div>
+                            <div class="rank-info">
+                                <h3>Good</h3>
+                                <p>1+ points</p>
+                            </div>
+                        </div>
+
+                        <div class="rank-item">
+                            <div class="rank-icon">⭐</div>
+                            <div class="rank-info">
+                                <h3>Great</h3>
+                                <p>10+ points</p>
+                            </div>
+                        </div>
+
+                        <div class="rank-item">
+                            <div class="rank-icon">🚀</div>
+                            <div class="rank-info">
+                                <h3>Voyager</h3>
+                                <p>20+ points</p>
+                            </div>
+                        </div>
+
+                        <div class="rank-item">
+                            <div class="rank-icon">✨</div>
+                            <div class="rank-info">
+                                <h3>Stellar</h3>
+                                <p>30+ points</p>
+                            </div>
+                        </div>
+
+                        <div class="rank-item">
+                            <div class="rank-icon">🔴</div>
+                            <div class="rank-info">
+                                <h3>Red Giant</h3>
+                                <p>40+ points</p>
+                            </div>
+                        </div>
+
+                        <div class="rank-item">
+                            <div class="rank-icon">⚪</div>
+                            <div class="rank-info">
+                                <h3>White Dwarf</h3>
+                                <p>50+ points</p>
+                            </div>
+                        </div>
+
+                        <div class="rank-item">
+                            <div class="rank-icon">💫</div>
+                            <div class="rank-info">
+                                <h3>Neutron Star</h3>
+                                <p>60+ points</p>
+                            </div>
+                        </div>
+
+                        <div class="rank-item">
+                            <div class="rank-icon">💥</div>
+                            <div class="rank-info">
+                                <h3>Supernova</h3>
+                                <p>70+ points</p>
+                            </div>
+                        </div>
+
+                        <div class="rank-item legendary">
+                            <div class="rank-icon">🕳️</div>
+                            <div class="rank-info">
+                                <h3>Black Hole</h3>
+                                <p>80+ points</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </dialog>
         <script>
             // Constants - Ring diameters, colors, etc.
             const FIRST_RING_COLOR = "#ff6b6b";
@@ -644,7 +1055,6 @@
                 numWordsInGrandAlignment: 5,
                 score: 0,
                 maxScore: 142,
-                autoCheck: false,
                 dragState: null,
                 selectedRing: null,
                 center: { x: 300, y: 300 },
@@ -680,6 +1090,11 @@
             const canvas = document.getElementById("gameCanvas");
             const ctx = canvas.getContext("2d");
 
+            // Score dialog setup
+            const showRanksDialogButton =
+                document.getElementById("score-panel");
+            const dialog = document.getElementById("ranksDialog");
+
             // Animation loop
             function animate() {
                 update();
@@ -701,11 +1116,6 @@
                         ring.position += diff * 0.15; // Smooth interpolation
                     }
                 });
-
-                // Auto-check if enabled
-                if (gameState.autoCheck) {
-                    checkAllPositions();
-                }
             }
 
             function draw() {
@@ -903,6 +1313,11 @@
             // Keyboard controls
             document.addEventListener("keydown", handleKeyDown);
 
+            // Rank board input handling
+            showRanksDialogButton.addEventListener("click", () => {
+                dialog.showModal();
+            });
+
             function handleKeyDown(e) {
                 if (!gameState.selectedRing) return;
 
@@ -1053,6 +1468,10 @@
             function endDrag() {
                 gameState.dragState = null;
                 canvas.style.cursor = "pointer";
+            }
+
+            function closeRanksDialog() {
+                dialog.close();
             }
 
             // Scoring system
@@ -1336,12 +1755,6 @@
                 }
             }
 
-            function toggleAutoCheck() {
-                gameState.autoCheck = !gameState.autoCheck;
-                document.getElementById("autoCheckStatus").textContent =
-                    gameState.autoCheck ? "ON" : "OFF";
-            }
-
             function updateWordBank() {
                 const foundWordsEl = document.getElementById("foundWords");
 
@@ -1351,16 +1764,16 @@
                 } else {
                     foundWordsEl.innerHTML = "";
 
-                    // Sort words by length, then alphabetically
-                    const sortedWords = [...gameState.foundWords].sort(
-                        (a, b) => {
-                            if (a.length !== b.length)
-                                return a.length - b.length;
-                            return a.localeCompare(b);
-                        },
-                    );
+                    // // Sort words by length, then alphabetically
+                    // const sortedWords = [...gameState.foundWords].sort(
+                    //     (a, b) => {
+                    //         if (a.length !== b.length)
+                    //             return a.length - b.length;
+                    //         return a.localeCompare(b);
+                    //     },
+                    // );
 
-                    sortedWords.forEach((word) => {
+                    gameState.foundWords.forEach((word) => {
                         const wordEl = document.createElement("div");
                         wordEl.className = "word-item";
                         wordEl.textContent = word;

@@ -1,3 +1,39 @@
+const FIRST_RING_COLOR = "#ff6b6b";
+const SECOND_RING_COLOR = "#297a23";
+const THIRD_RING_COLOR = "#45b7d1";
+const FOURTH_RING_COLOR = "#9945d1";
+const FIFTH_RING_COLOR = "#9e297b";
+
+const FIRST_RING_RADIUS = 60;
+const SECOND_RING_RADIUS = 110;
+const THIRD_RING_RADIUS = 160;
+const FOURTH_RING_RADIUS = 210;
+const FIFTH_RING_RADIUS = 260;
+
+const RING_RADII = [
+  FIRST_RING_RADIUS,
+  SECOND_RING_RADIUS,
+  THIRD_RING_RADIUS,
+  FOURTH_RING_RADIUS,
+  FIFTH_RING_RADIUS,
+];
+
+const RING_COLORS = [
+  FIRST_RING_COLOR,
+  SECOND_RING_COLOR,
+  THIRD_RING_COLOR,
+  FOURTH_RING_COLOR,
+  FIFTH_RING_COLOR,
+];
+
+const RING_NAME_MAP = {
+  1: "first",
+  2: "second",
+  3: "third",
+  4: "fourth",
+  5: "fifth",
+};
+
 export function runFindAllPossibleWords(gameState, dictionary) {
   let allPossibleWords = findAllPossibleWords(
     gameState.letters,
@@ -212,3 +248,43 @@ function findWordsInAlignmentForState(
 
   return words;
 }
+
+function createLettersArray(words) {
+  let letters = [];
+
+  // words array contains words of the form: { word: 'lorem', angle: 0-360 (increments of 30), startingRing: 1-5 }
+  for (const word of words) {
+    const wordLetters = word.word.split("");
+
+    // Rings go out -> in between 8 o'clock and 1 o'clock (240deg -> 30deg)
+    const outToIn = word.angle >= 240 || word.angle <= 30;
+
+    for (let i = 0; i < wordLetters.length; i++) {
+      const ringNumber = outToIn
+        ? word.startingRing - i // ringNumber decreases with each letter
+        : word.startingRing + i; // ringNumber increases with each letter
+
+      // If ringNumber is 0, then it's the sun -> don't add to the array
+      if (ringNumber !== 0) {
+        letters.push({
+          letter: wordLetters[i].toUpperCase(),
+          angle: ringNumber < 0 ? (word.angle + 180) % 360 : word.angle,
+          radius: RING_RADII[Math.abs(ringNumber) - 1],
+          ring: RING_NAME_MAP[Math.abs(ringNumber)],
+          color: RING_COLORS[Math.abs(ringNumber) - 1],
+        });
+      }
+    }
+  }
+
+  return letters;
+}
+
+const words = [
+  { word: "seed", angle: 210, startingRing: 2 },
+  { word: "grow", angle: 300, startingRing: 5 },
+  { word: "soil", angle: 60, startingRing: 2 },
+  { word: "harvest", angle: 0, startingRing: 2 },
+  { word: "gardens", angle: 270, startingRing: 2 },
+];
+console.log(createLettersArray(words));

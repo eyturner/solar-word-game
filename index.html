@@ -179,184 +179,189 @@
             // Game state - now with flexible letter positioning
             const gameState = {
                 letters: [
-                    // First ring
                     {
-                        letter: "E",
-                        radius: FIRST_RING_RADIUS,
-                        angle: 0,
-                        color: FIRST_RING_COLOR,
-                        ring: "inner",
-                    },
-                    {
-                        letter: "L",
-                        radius: FIRST_RING_RADIUS,
-                        angle: 90,
-                        color: FIRST_RING_COLOR,
-                        ring: "inner",
-                    },
-                    {
-                        letter: "A",
-                        radius: FIRST_RING_RADIUS,
-                        angle: 180,
-                        color: FIRST_RING_COLOR,
-                        ring: "inner",
-                    },
-                    {
-                        letter: "A",
-                        radius: FIRST_RING_RADIUS,
-                        angle: 270,
-                        color: FIRST_RING_COLOR,
-                        ring: "inner",
-                    },
-
-                    // Second ring
-                    {
-                        letter: "M",
-                        radius: SECOND_RING_RADIUS,
-                        angle: 0,
-                        color: SECOND_RING_COLOR,
-                        ring: "middle",
-                    },
-                    {
-                        letter: "G",
-                        radius: SECOND_RING_RADIUS,
-                        angle: 60,
-                        color: SECOND_RING_COLOR,
-                        ring: "middle",
-                    },
-                    {
-                        letter: "R",
-                        radius: SECOND_RING_RADIUS,
-                        angle: 120,
-                        color: SECOND_RING_COLOR,
-                        ring: "middle",
-                    },
-                    {
-                        letter: "L",
-                        radius: SECOND_RING_RADIUS,
-                        angle: 180,
-                        color: SECOND_RING_COLOR,
-                        ring: "middle",
-                    },
-                    {
-                        letter: "O",
-                        radius: SECOND_RING_RADIUS,
+                        letter: "S",
                         angle: 210,
-                        color: SECOND_RING_COLOR,
-                        ring: "middle",
+                        radius: 110,
+                        ring: "second",
+                        color: "#297a23",
                     },
                     {
                         letter: "E",
-                        radius: SECOND_RING_RADIUS,
-                        angle: 270,
-                        color: SECOND_RING_COLOR,
-                        ring: "middle",
-                    },
-
-                    // Third ring
-                    {
-                        letter: "E",
-                        radius: THIRD_RING_RADIUS,
-                        angle: 0,
-                        color: THIRD_RING_COLOR,
-                        ring: "outer",
+                        angle: 210,
+                        radius: 160,
+                        ring: "third",
+                        color: "#45b7d1",
                     },
                     {
                         letter: "E",
-                        radius: THIRD_RING_RADIUS,
-                        angle: 60,
-                        color: THIRD_RING_COLOR,
-                        ring: "outer",
-                    },
-                    {
-                        letter: "U",
-                        radius: THIRD_RING_RADIUS,
-                        angle: 120,
-                        color: THIRD_RING_COLOR,
-                        ring: "outer",
+                        angle: 210,
+                        radius: 210,
+                        ring: "fourth",
+                        color: "#9945d1",
                     },
                     {
                         letter: "D",
-                        radius: THIRD_RING_RADIUS,
-                        angle: 180,
-                        color: THIRD_RING_COLOR,
-                        ring: "outer",
-                    },
-                    {
-                        letter: "P",
-                        radius: THIRD_RING_RADIUS,
                         angle: 210,
-                        color: THIRD_RING_COLOR,
-                        ring: "outer",
+                        radius: 260,
+                        ring: "fifth",
+                        color: "#9e297b",
                     },
                     {
-                        letter: "P",
-                        radius: THIRD_RING_RADIUS,
-                        angle: 270,
-                        color: THIRD_RING_COLOR,
-                        ring: "outer",
+                        letter: "G",
+                        angle: 300,
+                        radius: 260,
+                        ring: "fifth",
+                        color: "#9e297b",
                     },
-
-                    // Fourth ring
                     {
-                        letter: "M",
-                        radius: FOURTH_RING_RADIUS,
-                        angle: 60,
-                        color: FOURTH_RING_COLOR,
+                        letter: "R",
+                        angle: 300,
+                        radius: 210,
                         ring: "fourth",
+                        color: "#9945d1",
                     },
                     {
-                        letter: "B",
-                        radius: FOURTH_RING_RADIUS,
-                        angle: 120,
-                        color: FOURTH_RING_COLOR,
-                        ring: "fourth",
+                        letter: "O",
+                        angle: 300,
+                        radius: 160,
+                        ring: "third",
+                        color: "#45b7d1",
                     },
                     {
-                        letter: "A",
-                        radius: FOURTH_RING_RADIUS,
-                        angle: 210,
-                        color: FOURTH_RING_COLOR,
-                        ring: "fourth",
+                        letter: "W",
+                        angle: 300,
+                        radius: 110,
+                        ring: "second",
+                        color: "#297a23",
                     },
-
-                    // Fifth ring
                     {
                         letter: "S",
-                        radius: FIFTH_RING_RADIUS,
                         angle: 60,
-                        color: FIFTH_RING_COLOR,
-                        ring: "fifth",
+                        radius: 110,
+                        ring: "second",
+                        color: "#297a23",
                     },
                     {
-                        letter: "Y",
-                        radius: FIFTH_RING_RADIUS,
-                        angle: 120,
-                        color: FIFTH_RING_COLOR,
-                        ring: "fifth",
+                        letter: "O",
+                        angle: 60,
+                        radius: 160,
+                        ring: "third",
+                        color: "#45b7d1",
+                    },
+                    {
+                        letter: "I",
+                        angle: 60,
+                        radius: 210,
+                        ring: "fourth",
+                        color: "#9945d1",
                     },
                     {
                         letter: "L",
-                        radius: FIFTH_RING_RADIUS,
-                        angle: 210,
-                        color: FIFTH_RING_COLOR,
+                        angle: 60,
+                        radius: 260,
                         ring: "fifth",
+                        color: "#9e297b",
+                    },
+                    {
+                        letter: "H",
+                        angle: 0,
+                        radius: 110,
+                        ring: "second",
+                        color: "#297a23",
+                    },
+                    {
+                        letter: "A",
+                        angle: 0,
+                        radius: 60,
+                        ring: "first",
+                        color: "#ff6b6b",
+                    },
+                    {
+                        letter: "V",
+                        angle: 180,
+                        radius: 60,
+                        ring: "first",
+                        color: "#ff6b6b",
+                    },
+                    {
+                        letter: "E",
+                        angle: 180,
+                        radius: 110,
+                        ring: "second",
+                        color: "#297a23",
+                    },
+                    {
+                        letter: "S",
+                        angle: 180,
+                        radius: 160,
+                        ring: "third",
+                        color: "#45b7d1",
+                    },
+                    {
+                        letter: "T",
+                        angle: 180,
+                        radius: 210,
+                        ring: "fourth",
+                        color: "#9945d1",
+                    },
+                    {
+                        letter: "G",
+                        angle: 270,
+                        radius: 110,
+                        ring: "second",
+                        color: "#297a23",
+                    },
+                    {
+                        letter: "A",
+                        angle: 270,
+                        radius: 60,
+                        ring: "first",
+                        color: "#ff6b6b",
+                    },
+                    {
+                        letter: "D",
+                        angle: 90,
+                        radius: 60,
+                        ring: "first",
+                        color: "#ff6b6b",
+                    },
+                    {
+                        letter: "E",
+                        angle: 90,
+                        radius: 110,
+                        ring: "second",
+                        color: "#297a23",
+                    },
+                    {
+                        letter: "N",
+                        angle: 90,
+                        radius: 160,
+                        ring: "third",
+                        color: "#45b7d1",
+                    },
+                    {
+                        letter: "S",
+                        angle: 90,
+                        radius: 210,
+                        ring: "fourth",
+                        color: "#9945d1",
                     },
                 ],
                 rings: {
-                    inner: {
+                    first: {
                         position: 0,
                         targetPosition: 0,
                         radius: FIRST_RING_RADIUS,
                         color: FIRST_RING_COLOR,
                     },
-                    middle: {
+                    second: {
                         position: 0,
                         targetPosition: 0,
                         radius: SECOND_RING_RADIUS,
                         color: SECOND_RING_COLOR,
                     },
-                    outer: {
+                    third: {
                         position: 0,
                         targetPosition: 0,
                         radius: THIRD_RING_RADIUS,
@@ -378,7 +383,7 @@
                 foundWords: new Set(),
                 numWordsInGrandAlignment: 5,
                 score: 0,
-                maxScore: 99,
+                maxScore: 54,
                 dragState: null,
                 selectedRing: null,
                 center: { x: 300, y: 300 },
@@ -562,7 +567,7 @@
                     ctx.fillStyle = "white";
                     ctx.font = "bold 22px Arial";
                     ctx.textAlign = "center";
-                    ctx.textBaseline = "middle";
+                    ctx.textBaseline = "second";
                     ctx.fillText(letterObj.letter, x, y);
                 });
             }
@@ -1148,6 +1153,9 @@
                     const letters = getLettersAtPosition(position);
                     const wordObjects = findWordsInAlignment(letters, position);
 
+                    console.log(wordObjects);
+
+                    // BUGFIX: need to check for multiword bonuses after all words are found
                     if (wordObjects.length > 0) {
                         // Check for multi-word bonus at this position
                         const isMultiWord = wordObjects.length > 1;
@@ -1155,6 +1163,12 @@
                             wordObjects.length ==
                             gameState.numWordsInGrandAlignment;
 
+                        console.log(
+                            "IN GRAND !",
+                            isGrandAlignment,
+                            wordObjects.length,
+                            gameState.numWordsInGrandAlignment,
+                        );
                         // 2 bonus points for each additional word found!
                         let bonusScore = 0;
                         if (wordObjects.length > 1 && !isGrandAlignment) {
@@ -1233,16 +1247,16 @@
             // Helper Functions
             function getNextRing(currentRing) {
                 switch (currentRing) {
-                    case "inner":
-                        return "middle";
-                    case "middle":
-                        return "outer";
-                    case "outer":
+                    case "first":
+                        return "second";
+                    case "second":
+                        return "third";
+                    case "third":
                         return "fourth";
                     case "fourth":
                         return "fifth";
                     case "fifth":
-                        return "inner";
+                        return "first";
                     default:
                         return null;
                 }
@@ -1250,14 +1264,14 @@
 
             function getPrevoiusRing(currentRing) {
                 switch (currentRing) {
-                    case "inner":
+                    case "first":
                         return "fifth";
-                    case "middle":
-                        return "inner";
-                    case "outer":
-                        return "middle";
+                    case "second":
+                        return "first";
+                    case "third":
+                        return "second";
                     case "fourth":
-                        return "outer";
+                        return "third";
                     case "fifth":
                         return "fourth";
                     default:

@@ -79,7 +79,7 @@ function findAllPossibleWords(initialLetters, rings, sunLetter, validWords) {
   const positionsToCheck = [0, 1, 8, 9, 10, 11];
 
   // Explicitly define ring order to ensure consistent cycling
-  const ringNames = ["inner", "middle", "outer", "fourth", "fifth"];
+  const ringNames = ["first", "second", "third", "fourth", "fifth"];
   const totalCombinations = Math.pow(12, ringNames.length);
 
   console.log(
@@ -281,10 +281,10 @@ function createLettersArray(words) {
 }
 
 const words = [
-  { word: "seed", angle: 210, startingRing: 2 },
-  { word: "grow", angle: 300, startingRing: 5 },
-  { word: "soil", angle: 60, startingRing: 2 },
-  { word: "harvest", angle: 0, startingRing: 2 },
-  { word: "gardens", angle: 270, startingRing: 2 },
+  { word: "tea", angle: 180, startingRing: 0 },
+  { word: "matcha", angle: 300, startingRing: 2 },
+  { word: "chai", angle: 60, startingRing: 2 },
+  { word: "earl", angle: 30, startingRing: 5 },
+  { word: "grey", angle: 240, startingRing: 5 },
 ];
 console.log(createLettersArray(words));

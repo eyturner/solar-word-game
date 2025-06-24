@@ -389,7 +389,7 @@
             // Score dialog setup
             const showRanksDialogButton =
                 document.getElementById("score-panel");
-            const dialog = document.getElementById("ranksDialog");
+            const ranksDialog = document.getElementById("ranksDialog");
 
             // Animation loop
             function animate() {
@@ -690,7 +690,7 @@
 
             // Rank board input handling
             showRanksDialogButton.addEventListener("click", () => {
-                dialog.showModal();
+                ranksDialog.showModal();
             });
 
             function handleKeyDown(e) {
@@ -866,7 +866,7 @@
             }
 
             function closeRanksDialog() {
-                dialog.close();
+                ranksDialog.close();
             }
 
             // Scoring system
@@ -1310,6 +1310,7 @@
                 animate();
             }
 
+            // Start the game!
             initializeGame();
         </script>
     </body>

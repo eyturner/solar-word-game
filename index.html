@@ -902,10 +902,8 @@
                 // Base scoring (Spelling Bee style)
                 if (length === 3) {
                     baseScore = 1;
-                } else if (length === 4) {
-                    baseScore = 2;
                 } else {
-                    baseScore = length; // 5+ letters get 1 point per letter
+                    baseScore = length; // 4+ letters get 1 point per letter
                 }
 
                 // Bonuses
@@ -1113,29 +1111,14 @@
                 const wordDetails = [];
                 const positionsToCheck = [0, 1, 8, 9, 10, 11];
                 let newWordsFound = false;
+                let bonusScore = 0;
 
                 for (let position of positionsToCheck) {
                     const letters = getLettersAtPosition(position);
                     const wordObjects = findWordsInAlignment(letters, position);
 
-                    // TODO:
-                    // BUGFIX: need to check for multiword bonuses after all words are found
                     if (wordObjects.length > 0) {
-                        // Check for multi-word bonus at this position
-                        const isMultiWord = wordObjects.length > 1;
-                        const isGrandAlignment =
-                            wordObjects.length ==
-                            gameState.numWordsInGrandAlignment;
-
-                        // 2 bonus points for each additional word found!
-                        let bonusScore = 0;
-                        if (wordObjects.length > 1 && !isGrandAlignment) {
-                            bonusScore +=
-                                2 *
-                                (gameState.numWordsInGrandAlignment -
-                                    wordObjects.length);
-                        } else if (isGrandAlignment) bonusScore += 15;
-
+                        // Add words found to allWords to check for bonuses later
                         wordObjects.forEach((wordObj) => {
                             allWords.push(wordObj.word);
 
@@ -1149,7 +1132,6 @@
                                     wordObj.word,
                                     hasSun,
                                 );
-                                wordScore += bonusScore;
                                 gameState.score += wordScore;
                             }
                         });
@@ -1162,6 +1144,21 @@
                     }
                 }
 
+                // Check for multi-word bonus at this position
+                const isMultiWord = allWords.length > 1;
+                const isGrandAlignment =
+                    allWords.length == gameState.numWordsInGrandAlignment;
+
+                // 2 bonus points for each additional word found!
+                if (allWords.length > 1 && !isGrandAlignment) {
+                    bonusScore +=
+                        2 *
+                        (gameState.numWordsInGrandAlignment - allWords.length);
+                } else if (isGrandAlignment) bonusScore += 15;
+
+                // Apply all bonus scores (multi-word, grand alignment, etc)
+                gameState.score += bonusScore;
+
                 // Add to word bank
                 allWords.forEach((word) => {
                     gameState.foundWords.add(word);
@@ -1171,6 +1168,7 @@
                 updateScoreDisplay();
 
                 if (newWordsFound) {
+                    // TODO:
                     // Brief score animation could go here
                 }
             }
@@ -1183,15 +1181,6 @@
                         "<em>Found words will appear here...</em>";
                 } else {
                     foundWordsEl.innerHTML = "";
-
-                    // // Sort words by length, then alphabetically
-                    // const sortedWords = [...gameState.foundWords].sort(
-                    //     (a, b) => {
-                    //         if (a.length !== b.length)
-                    //             return a.length - b.length;
-                    //         return a.localeCompare(b);
-                    //     },
-                    // );
 
                     gameState.foundWords.forEach((word) => {
                         const wordEl = document.createElement("div");

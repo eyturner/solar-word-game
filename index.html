@@ -70,7 +70,7 @@
 
                 <div class="dialog-body">
                     <div class="ranks-grid">
-                        <div class="rank-item current">
+                        <div class="rank-item current-rank" id="rankBeginner">
                             <div class="rank-icon">🌱</div>
                             <div class="rank-info">
                                 <h3>Beginner</h3>
@@ -78,7 +78,7 @@
                             </div>
                         </div>
 
-                        <div class="rank-item">
+                        <div class="rank-item" id="rankGood">
                             <div class="rank-icon">👍</div>
                             <div class="rank-info">
                                 <h3>Good</h3>
@@ -86,7 +86,7 @@
                             </div>
                         </div>
 
-                        <div class="rank-item">
+                        <div class="rank-item" id="rankGreat">
                             <div class="rank-icon">⭐</div>
                             <div class="rank-info">
                                 <h3>Great</h3>
@@ -94,7 +94,7 @@
                             </div>
                         </div>
 
-                        <div class="rank-item">
+                        <div class="rank-item" id="rankVoyager">
                             <div class="rank-icon">🚀</div>
                             <div class="rank-info">
                                 <h3>Voyager</h3>
@@ -102,7 +102,7 @@
                             </div>
                         </div>
 
-                        <div class="rank-item">
+                        <div class="rank-item" id="rankStellar">
                             <div class="rank-icon">✨</div>
                             <div class="rank-info">
                                 <h3>Stellar</h3>
@@ -110,7 +110,7 @@
                             </div>
                         </div>
 
-                        <div class="rank-item">
+                        <div class="rank-item" id="rankRedGiant">
                             <div class="rank-icon">🔴</div>
                             <div class="rank-info">
                                 <h3>Red Giant</h3>
@@ -118,7 +118,7 @@
                             </div>
                         </div>
 
-                        <div class="rank-item">
+                        <div class="rank-item" id="rankWhiteDwarf">
                             <div class="rank-icon">⚪</div>
                             <div class="rank-info">
                                 <h3>White Dwarf</h3>
@@ -126,7 +126,7 @@
                             </div>
                         </div>
 
-                        <div class="rank-item">
+                        <div class="rank-item" id="rankSupernova">
                             <div class="rank-icon">💥</div>
                             <div class="rank-info">
                                 <h3>Supernova</h3>
@@ -134,7 +134,7 @@
                             </div>
                         </div>
 
-                        <div class="rank-item">
+                        <div class="rank-item" id="rankNeutronStar">
                             <div class="rank-icon">💫</div>
                             <div class="rank-info">
                                 <h3>Neutron Star</h3>
@@ -142,7 +142,7 @@
                             </div>
                         </div>
 
-                        <div class="rank-item legendary">
+                        <div class="rank-item" id="rankBlackHole">
                             <div class="rank-icon">🕳️</div>
                             <div class="rank-info">
                                 <h3>Black Hole</h3>
@@ -355,7 +355,58 @@
                 sun: { letter: "T", radius: 20, color: "#ffdd44" },
                 systemRotation: 0,
                 hoveredArrow: null,
+                rank: "Beginner",
             };
+
+            // Scoring system
+            const RANKS = [
+                { name: "Beginner", min: 0, rankId: "rankBeginner" },
+                {
+                    name: "Good",
+                    min: Math.floor(gameState.maxScore * 0.1),
+                    rankId: "rankGood",
+                },
+                {
+                    name: "Great",
+                    min: Math.floor(gameState.maxScore * 0.2),
+                    rankId: "rankGreat",
+                },
+                {
+                    name: "Voyager",
+                    min: Math.floor(gameState.maxScore * 0.3),
+                    rankId: "rankVoyager",
+                },
+                {
+                    name: "Stellar",
+                    min: Math.floor(gameState.maxScore * 0.4),
+                    rankId: "rankStellar",
+                },
+                {
+                    name: "Red Giant",
+                    min: Math.floor(gameState.maxScore * 0.5),
+                    rankId: "rankRedGiant",
+                },
+                {
+                    name: "White Dwarf",
+                    min: Math.floor(gameState.maxScore * 0.6),
+                    rankId: "rankWhiteDwarf",
+                },
+                {
+                    name: "Supernova",
+                    min: Math.floor(gameState.maxScore * 0.7),
+                    rankId: "rankSupernova",
+                },
+                {
+                    name: "Neutron Star",
+                    min: Math.floor(gameState.maxScore * 0.8),
+                    rankId: "rankNeutronStar",
+                },
+                {
+                    name: "Black Hole",
+                    min: gameState.maxScore,
+                    rankId: "rankBlackHole",
+                },
+            ];
 
             // Word list
             async function loadDictionary() {
@@ -869,32 +920,6 @@
                 ranksDialog.close();
             }
 
-            // Scoring system
-            const RANKS = [
-                { name: "Beginner", min: 0 },
-                { name: "Good", min: Math.floor(gameState.maxScore * 0.1) },
-                { name: "Great", min: Math.floor(gameState.maxScore * 0.2) },
-                { name: "Voyager", min: Math.floor(gameState.maxScore * 0.3) },
-                { name: "Stellar", min: Math.floor(gameState.maxScore * 0.4) },
-                {
-                    name: "Red Giant",
-                    min: Math.floor(gameState.maxScore * 0.5),
-                },
-                {
-                    name: "White Dwarf",
-                    min: Math.floor(gameState.maxScore * 0.6),
-                },
-                {
-                    name: "Supernova",
-                    min: Math.floor(gameState.maxScore * 0.7),
-                },
-                {
-                    name: "Neutron Star",
-                    min: Math.floor(gameState.maxScore * 0.8),
-                },
-                { name: "Black Hole", min: gameState.maxScore },
-            ];
-
             function calculateWordScore(word, hasSun = false) {
                 let baseScore;
                 const length = word.length;
@@ -929,8 +954,24 @@
                 );
                 document.getElementById("wordCount").textContent =
                     `${gameState.foundWords.size} words found`;
+            }
 
-                // TODO: update current rank highlight
+            function updateRankHighlight() {
+                const rank = getRank(gameState.score);
+
+                if (rank != gameState.rank) {
+                    // Remove current rank highlight from previous rank
+                    const prevRankDialog =
+                        document.querySelector(".current-rank");
+                    prevRankDialog.classList.toggle("current-rank");
+
+                    // Add current rank highlight to new rank
+                    const newRankObj = RANKS.find((r) => r.name == rank);
+                    const newRankDialog = document.querySelector(
+                        `#${newRankObj.rankId}`,
+                    );
+                    newRankDialog.classList.toggle("current-rank");
+                }
             }
 
             function rotateRing(ringName, direction) {
@@ -1166,6 +1207,7 @@
 
                 updateWordBank();
                 updateScoreDisplay();
+                updateRankHighlight();
 
                 if (newWordsFound) {
                     // TODO:

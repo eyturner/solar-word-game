@@ -332,22 +332,8 @@ details[open] {
     left: 100%;
 }
 
-.rank-item.current {
+.rank-item.current-rank {
     border-color: rgba(255, 107, 107, 0.5);
-}
-
-.rank-item.legendary {
-    border-color: rgba(255, 221, 68, 0.8);
-    background: linear-gradient(135deg, rgba(255, 221, 68, 0.1), rgba(255, 170, 0, 0.1));
-}
-
-.rank-item.legendary::after {
-    content: '✨';
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    font-size: 12px;
-    opacity: 0.7;
 }
 
 .rank-icon {

@@ -280,11 +280,13 @@ function createLettersArray(words) {
   return letters;
 }
 
+// oak, pine, birch, sycamore, palm, tree, willow -> sycamore, willow, oak, pine, palm, tree
 const words = [
-  { word: "tea", angle: 180, startingRing: 0 },
-  { word: "matcha", angle: 300, startingRing: 2 },
-  { word: "chai", angle: 60, startingRing: 2 },
-  { word: "earl", angle: 30, startingRing: 5 },
-  { word: "grey", angle: 240, startingRing: 5 },
+  { word: "oak", angle: 210, startingRing: 0 },
+  { word: "sycamore", angle: 330, startingRing: 5 },
+  { word: "willow", angle: 270, startingRing: 4 },
+  { word: "pine", angle: 30, startingRing: 5 },
+  { word: "tree", angle: 120, startingRing: 2 },
+  { word: "palm", angle: 300, startingRing: 5 },
 ];
 console.log(createLettersArray(words));

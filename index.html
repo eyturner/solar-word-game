@@ -1210,21 +1210,6 @@
                     }
                 }
 
-                // Check for multi-word bonus at this position
-                const isMultiWord = allWords.length > 1;
-                const isGrandAlignment =
-                    allWords.length == gameState.numWordsInGrandAlignment;
-
-                // 2 bonus points for each additional word found!
-                if (allWords.length > 1 && !isGrandAlignment) {
-                    bonusScore +=
-                        2 *
-                        (gameState.numWordsInGrandAlignment - allWords.length);
-                } else if (isGrandAlignment) bonusScore += 15;
-
-                // Apply all bonus scores (multi-word, grand alignment, etc)
-                gameState.score += bonusScore;
-
                 // Add to word bank
                 allWords.forEach((word) => {
                     gameState.foundWords.add(word);
@@ -1236,6 +1221,22 @@
                 updateLocalStorage();
 
                 if (newWordsFound) {
+                    // Check for multi-word bonus at this position
+                    const isMultiWord = allWords.length > 1;
+                    const isGrandAlignment =
+                        allWords.length == gameState.numWordsInGrandAlignment;
+
+                    // 2 bonus points for each additional word found!
+                    if (allWords.length > 1 && !isGrandAlignment) {
+                        bonusScore +=
+                            2 *
+                            (gameState.numWordsInGrandAlignment -
+                                allWords.length);
+                    } else if (isGrandAlignment) bonusScore += 15;
+
+                    // Apply all bonus scores (multi-word, grand alignment, etc)
+                    gameState.score += bonusScore;
+
                     // Brief score animation could go here
                     drawWordLines();
                     selectedRing;

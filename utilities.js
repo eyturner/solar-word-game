@@ -44,21 +44,16 @@ export function runFindAllPossibleWords(gameState, dictionary) {
 
   // These words will give the players points, but won't contribute to the score needed for ranks
   let wordsNotCountingTowardMaxScore = [
-    "PERI",
-    "PILI",
-    "PILY",
-    "RET",
-    "ROLF",
-    "SERE",
-    "SORI",
-    "SOT",
-    "TOLE",
-    "TOR",
-    "TORI",
-    "WILE",
-    "LEA",
-    "LEAS",
-    "LEAL",
+    "ANI",
+    "ANIS",
+    "CEE",
+    "CEP",
+    "KRIS",
+    "MOR",
+    "MOR",
+    "SEN",
+    "SENE",
+    "SYCE",
   ];
 
   console.log(allPossibleWords);
@@ -287,6 +282,6 @@ const words = [
   { word: "willow", angle: 270, startingRing: 4 },
   { word: "pine", angle: 30, startingRing: 5 },
   { word: "tree", angle: 120, startingRing: 2 },
-  { word: "palm", angle: 300, startingRing: 5 },
+  // { word: "palm", angle: 300, startingRing: 5 },
 ];
 console.log(createLettersArray(words));

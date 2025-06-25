@@ -176,8 +176,11 @@
                 FIFTH_RING_RADIUS,
             ];
 
+            const LOCAL_STORAGE_KEY = "solarWordGameState";
+
             // Game state - now with flexible letter positioning
-            const gameState = {
+            let gameState = {
+                gameId: "DON'T BE A TEAS",
                 letters: [
                     {
                         letter: "E",
@@ -764,7 +767,7 @@
                         break;
                     case "ArrowDown":
                         e.preventDefault();
-                        gameState.selectedRing = getPrevoiusRing(
+                        gameState.selectedRing = getPreviousRing(
                             gameState.selectedRing,
                         );
                         break;
@@ -1208,6 +1211,7 @@
                 updateWordBank();
                 updateScoreDisplay();
                 updateRankHighlight();
+                updateLocalStorage();
 
                 if (newWordsFound) {
                     // TODO:
@@ -1233,6 +1237,16 @@
                 }
             }
 
+            function updateLocalStorage() {
+                // Get found words as array so they can be stored:
+                const foundWords = [...gameState.foundWords];
+
+                window.localStorage.setItem(
+                    LOCAL_STORAGE_KEY,
+                    JSON.stringify({ ...gameState, foundWords }),
+                );
+            }
+
             // Helper Functions
             function getNextRing(currentRing) {
                 switch (currentRing) {
@@ -1251,7 +1265,7 @@
                 }
             }
 
-            function getPrevoiusRing(currentRing) {
+            function getPreviousRing(currentRing) {
                 switch (currentRing) {
                     case "first":
                         return "fifth";
@@ -1333,8 +1347,48 @@
                 blackHolePoints.textContent = RANKS[9].min + "+ points";
             }
 
+            function getSavedGameState() {
+                const prevGameState =
+                    window.localStorage.getItem(LOCAL_STORAGE_KEY);
+
+                // If no state, set to starting state for day
+                if (!prevGameState) {
+                    window.localStorage.setItem(
+                        LOCAL_STORAGE_KEY,
+                        JSON.stringify(gameState),
+                    );
+                } else {
+                    const parsedPrevGameState = JSON.parse(prevGameState);
+
+                    // Clear old state if game id doesn't match current:
+                    if (parsedPrevGameState.gameId != gameState.gameId) {
+                        window.localStorage.setItem(
+                            LOCAL_STORAGE_KEY,
+                            JSON.stringify(gameState),
+                        );
+                    } else {
+                        window.localStorage.setItem(
+                            LOCAL_STORAGE_KEY,
+                            JSON.stringify(parsedPrevGameState),
+                        );
+
+                        // Convert foundWords array to Set
+                        const foundWordsSet = new Set(
+                            parsedPrevGameState.foundWords,
+                        );
+                        gameState = {
+                            ...parsedPrevGameState,
+                            foundWords: foundWordsSet,
+                        };
+
+                        // Show previous state!
+                        updateWordBank();
+                    }
+                }
+            }
+
             function initializeGame() {
-                // Initialize the game
+                getSavedGameState();
                 updateScoreDisplay();
                 initializeRanks();
                 shufflePlanets();

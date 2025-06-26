@@ -43,18 +43,7 @@ export function runFindAllPossibleWords(gameState, dictionary) {
   );
 
   // These words will give the players points, but won't contribute to the score needed for ranks
-  let wordsNotCountingTowardMaxScore = [
-    "ANI",
-    "ANIS",
-    "CEE",
-    "CEP",
-    "KRIS",
-    "MOR",
-    "MOR",
-    "SEN",
-    "SENE",
-    "SYCE",
-  ];
+  let wordsNotCountingTowardMaxScore = ["AVE", "NAE", "ROUE"];
 
   console.log(allPossibleWords);
   let maxScore = 0;
@@ -275,13 +264,12 @@ function createLettersArray(words) {
   return letters;
 }
 
-// oak, pine, birch, sycamore, palm, tree, willow -> sycamore, willow, oak, pine, palm, tree
 const words = [
-  { word: "oak", angle: 210, startingRing: 0 },
-  { word: "sycamore", angle: 330, startingRing: 5 },
-  { word: "willow", angle: 270, startingRing: 4 },
-  { word: "pine", angle: 30, startingRing: 5 },
-  { word: "tree", angle: 120, startingRing: 2 },
-  // { word: "palm", angle: 300, startingRing: 5 },
+  { word: "coral", angle: 270, startingRing: 3 },
+  { word: "ocean", angle: 330, startingRing: 3 },
+  { word: "sea", angle: 120, startingRing: 3 },
+  { word: "wave", angle: 180, startingRing: 2 },
+  { word: "reef", angle: 60, startingRing: 2 },
+  { word: "gulf", angle: 240, startingRing: 5 },
 ];
 console.log(createLettersArray(words));

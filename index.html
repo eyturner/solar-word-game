@@ -377,7 +377,7 @@
                     },
                 },
                 foundWords: new Set(),
-                numWordsInGrandAlignment: 5,
+                numWordsInGrandAlignment: 6,
                 score: 0,
                 maxScore: 127,
                 dragState: null,
@@ -1230,11 +1230,8 @@
                         allWords.length == gameState.numWordsInGrandAlignment;
 
                     // 2 bonus points for each additional word found!
-                    if (allWords.length > 1 && !isGrandAlignment) {
-                        bonusScore +=
-                            2 *
-                            (gameState.numWordsInGrandAlignment -
-                                allWords.length);
+                    if (isMultiWord && !isGrandAlignment) {
+                        bonusScore += 2 * (allWords.length - 1);
                     } else if (isGrandAlignment) bonusScore += 15;
 
                     // Apply all bonus scores (multi-word, grand alignment, etc)

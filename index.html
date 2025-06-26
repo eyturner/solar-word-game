@@ -1215,11 +1215,6 @@
                     gameState.foundWords.add(word);
                 });
 
-                updateWordBank();
-                updateScoreDisplay();
-                updateRankHighlight();
-                updateLocalStorage();
-
                 if (newWordsFound) {
                     // Check for multi-word bonus at this position
                     const isMultiWord = allWords.length > 1;
@@ -1237,9 +1232,13 @@
                     // Apply all bonus scores (multi-word, grand alignment, etc)
                     gameState.score += bonusScore;
 
+                    updateWordBank();
+                    updateScoreDisplay();
+                    updateRankHighlight();
+                    updateLocalStorage();
+
                     // Brief score animation could go here
                     drawWordLines();
-                    selectedRing;
                     // TODO: Brief animation for score
                 }
             }

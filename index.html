@@ -3,16 +3,17 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Solar Word Game - Canvas Version</title>
+        <title>The Daily Planet</title>
         <link rel="stylesheet" href="./styles.css" />
     </head>
     <body>
-        <h1 style="text-align: center; margin-bottom: 30px">Solar Word Game</h1>
+        <h1 style="text-align: center; margin-bottom: 30px">
+            The Daily Planet
+        </h1>
 
         <div class="game-layout">
             <div class="game-area">
                 <canvas id="gameCanvas" width="600" height="600"></canvas>
-
                 <div class="controls">
                     <button class="check-button" onclick="checkAllPositions()">
                         Check for Words (Space)
@@ -23,25 +24,15 @@
             </div>
 
             <div class="sidebar">
-                <div class="instructions">
-                    <details>
-                        <summary>
-                            <strong>How to play:</strong>
-                        </summary>
-                        <p>
-                            Click on an orbital ring to select it, then use
-                            arrow keys to rotate. You can also click and drag
-                            rings to rotate them. Find words by aligning
-                            letters!
-                        </p>
-
-                        <div class="keyboard-hint">
-                            <strong>Keyboard controls:</strong><br />
-                            Click ring and press arrows keys to rotate<br />
-                            Space bar to check for words
-                        </div>
-                    </details>
-                </div>
+                <!-- Help button -->
+                <button
+                    id="helpButton"
+                    class="help-button"
+                    onclick="openHelpDialog()"
+                    title="How to play"
+                >
+                    ?
+                </button>
                 <div id="score-panel">
                     <div>
                         <h2 id="playerScore">0</h2>
@@ -148,6 +139,100 @@
                                 <h3>Black Hole</h3>
                                 <p id="blackHolePoints">80+ points</p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </dialog>
+        <!-- Help Dialog -->
+        <dialog id="helpDialog" class="help-dialog">
+            <div class="dialog-content">
+                <div class="dialog-header">
+                    <h2>How to Play</h2>
+                    <button class="close-button" onclick="closeHelpDialog()">
+                        ×
+                    </button>
+                </div>
+
+                <div class="dialog-body">
+                    <div class="help-sections">
+                        <div class="help-section">
+                            <h3>🎯 Objective</h3>
+                            <p>
+                                Rotate the orbital rings to align letters and
+                                form words! Find all the hidden words to achieve
+                                the highest rank.
+                            </p>
+                        </div>
+
+                        <div class="help-section">
+                            <h3>🕹️ Controls</h3>
+                            <ul>
+                                <li>
+                                    <strong>Click & Drag:</strong> Rotate rings
+                                    by dragging them
+                                </li>
+                                <li>
+                                    <strong>Click Ring:</strong> Select a ring,
+                                    then use arrow keys
+                                </li>
+                                <li>
+                                    <strong>↑/↓ Keys:</strong> Switch between
+                                    rings
+                                </li>
+                                <li>
+                                    <strong>←/→ Keys:</strong> Rotate selected
+                                    ring
+                                </li>
+                                <li><strong>Space:</strong> Check for words</li>
+                                <li>
+                                    <strong>Corner Arrows:</strong> Rotate
+                                    entire system
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="help-section">
+                            <h3>📖 Word Formation</h3>
+                            <p>
+                                Words are formed by letters that align on the
+                                same line passing through the center. The sun
+                                letter can be part of words too!
+                            </p>
+                        </div>
+
+                        <div class="help-section">
+                            <h3>🏆 Scoring</h3>
+                            <ul>
+                                <li>
+                                    <strong>3-letter words:</strong> 1 point
+                                </li>
+                                <li>
+                                    <strong>4+ letter words:</strong> 1 point
+                                    per letter
+                                </li>
+                                <li>
+                                    <strong>Words with sun letter:</strong> +1
+                                    bonus
+                                </li>
+                                <li>
+                                    <strong>Multiple words:</strong> +2 per
+                                    extra word
+                                </li>
+                                <li>
+                                    <strong>Grand Alignment:</strong> +15 bonus!
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="help-section">
+                            <h3>🌟 Grand Alignment</h3>
+                            <p>
+                                The ultimate goal! Find the special
+                                configuration where you can make
+                                <strong>6 words</strong> at once. This triggers
+                                a celebration and awards a huge bonus!
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -381,12 +466,18 @@
                 score: 0,
                 maxScore: 127,
                 dragState: null,
-                selectedRing: null,
+                selectedRing: "first",
                 center: { x: 300, y: 300 },
                 sun: { letter: "A", radius: 20, color: "#ffdd44" },
                 systemRotation: 0,
                 hoveredArrow: null,
                 rank: "Beginner",
+                grandAlignmentAnimation: {
+                    active: false,
+                    startTime: 0,
+                    duration: 5000, // 3 seconds
+                    particles: [],
+                },
             };
 
             // Scoring system
@@ -495,6 +586,9 @@
                         ring.position += diff * 0.15; // Smooth interpolation
                     }
                 });
+
+                // Update grand alignment animation
+                updateGrandAlignmentAnimation();
             }
 
             function draw() {
@@ -515,6 +609,9 @@
 
                 // Draw rotation arrows
                 drawRotationArrows();
+
+                // Draw grand alignment animation (connection lines and particles)
+                drawGrandAlignmentAnimation();
 
                 // Draw any word visualization
                 drawWordLines();
@@ -758,6 +855,148 @@
                     ctx.stroke();
                 }
 
+                ctx.restore();
+            }
+
+            function startGrandAlignmentAnimation(wordDetails) {
+                gameState.grandAlignmentAnimation.active = true;
+                gameState.grandAlignmentAnimation.startTime = Date.now();
+                gameState.grandAlignmentAnimation.particles = [];
+                gameState.grandAlignmentAnimation.connectionLines = [];
+
+                // Create spaceship animation data
+                gameState.grandAlignmentAnimation.spaceship = {
+                    angle: 0,
+                    radius: 320,
+                    x: gameState.center.x + 320,
+                    y: gameState.center.y,
+                    speed: 0.05, // radians per frame
+                    bobOffset: 0,
+                    trailParticles: [],
+                };
+
+                // Create connection lines for all aligned letters
+                wordDetails.forEach((detail) => {
+                    const position = detail.position;
+                    const positionAngle = position * 30;
+                    const oppositeAngle = (positionAngle + 180) % 360;
+
+                    // Calculate line coordinates
+                    const startX =
+                        gameState.center.x +
+                        300 * Math.cos(((positionAngle - 90) * Math.PI) / 180);
+                    const startY =
+                        gameState.center.y +
+                        300 * Math.sin(((positionAngle - 90) * Math.PI) / 180);
+                    const endX =
+                        gameState.center.x +
+                        300 * Math.cos(((oppositeAngle - 90) * Math.PI) / 180);
+                    const endY =
+                        gameState.center.y +
+                        300 * Math.sin(((oppositeAngle - 90) * Math.PI) / 180);
+
+                    gameState.grandAlignmentAnimation.connectionLines.push({
+                        startX,
+                        startY,
+                        endX,
+                        endY,
+                        progress: 0,
+                    });
+                });
+
+                // Create celebration particles
+                for (let i = 0; i < 30; i++) {
+                    gameState.grandAlignmentAnimation.particles.push(
+                        createParticle(),
+                    );
+                }
+            }
+
+            function createParticle() {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 2 + Math.random() * 4;
+                const life = 1.0;
+
+                return {
+                    x: gameState.center.x,
+                    y: gameState.center.y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    life: life,
+                    maxLife: life,
+                    size: 3 + Math.random() * 4,
+                    color: ["#ffdd44", "#4ecdc4", "#ff6b6b", "#9945d1"][
+                        Math.floor(Math.random() * 4)
+                    ],
+                };
+            }
+
+            function updateGrandAlignmentAnimation() {
+                if (!gameState.grandAlignmentAnimation.active) return;
+
+                const elapsed =
+                    Date.now() - gameState.grandAlignmentAnimation.startTime;
+                const progress = Math.min(
+                    elapsed / gameState.grandAlignmentAnimation.duration,
+                    1,
+                );
+
+                // Update celebration particles
+                gameState.grandAlignmentAnimation.particles.forEach(
+                    (particle) => {
+                        particle.x += particle.vx;
+                        particle.y += particle.vy;
+                        particle.vy += 0.1; // Gravity
+                        particle.life -= 0.02;
+
+                        // Fade out
+                        particle.life = Math.max(0, particle.life);
+                    },
+                );
+
+                // Remove dead particles and add new ones
+                gameState.grandAlignmentAnimation.particles =
+                    gameState.grandAlignmentAnimation.particles.filter(
+                        (p) => p.life > 0,
+                    );
+
+                // Keep adding particles for first 2 seconds
+                if (elapsed < 2000 && Math.random() < 0.2) {
+                    gameState.grandAlignmentAnimation.particles.push(
+                        createParticle(),
+                    );
+                }
+
+                // End animation
+                if (progress >= 1) {
+                    gameState.grandAlignmentAnimation.active = false;
+                }
+            }
+
+            function drawGrandAlignmentAnimation() {
+                if (!gameState.grandAlignmentAnimation.active) return;
+
+                ctx.save();
+
+                // Draw celebration particles
+                gameState.grandAlignmentAnimation.particles.forEach(
+                    (particle) => {
+                        ctx.globalAlpha = particle.life / particle.maxLife;
+                        ctx.fillStyle = particle.color;
+
+                        ctx.beginPath();
+                        ctx.arc(
+                            particle.x,
+                            particle.y,
+                            particle.size,
+                            0,
+                            Math.PI * 2,
+                        );
+                        ctx.fill();
+                    },
+                );
+
+                ctx.globalAlpha = 1;
                 ctx.restore();
             }
 
@@ -1232,7 +1471,11 @@
                     // 2 bonus points for each additional word found!
                     if (isMultiWord && !isGrandAlignment) {
                         bonusScore += 2 * (allWords.length - 1);
-                    } else if (isGrandAlignment) bonusScore += 15;
+                    } else if (isGrandAlignment) {
+                        bonusScore += 15;
+                        // 🎉 TRIGGER THE GRAND ALIGNMENT ANIMATION! 🎉
+                        startGrandAlignmentAnimation(wordDetails);
+                    }
 
                     // Apply all bonus scores (multi-word, grand alignment, etc)
                     gameState.score += bonusScore;
@@ -1420,6 +1663,30 @@
                     }
                 }
             }
+
+            function openHelpDialog() {
+                const dialog = document.getElementById("helpDialog");
+                dialog.showModal();
+            }
+
+            function closeHelpDialog() {
+                const dialog = document.getElementById("helpDialog");
+                dialog.classList.add("closing");
+
+                setTimeout(() => {
+                    dialog.close();
+                    dialog.classList.remove("closing");
+                }, 300);
+            }
+
+            // Close on backdrop click
+            document
+                .getElementById("helpDialog")
+                .addEventListener("click", (e) => {
+                    if (e.target.tagName === "DIALOG") {
+                        closeHelpDialog();
+                    }
+                });
 
             function initializeGame() {
                 getSavedGameState();
